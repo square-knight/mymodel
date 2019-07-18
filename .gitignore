@@ -1,0 +1,12 @@
+*.py[cod]
+*.conf
+*.ini
+*.log
+*.yaml
+*.prof
+*.cprof
+.DS_Store
+/.idea/
+.vscode/
+__pycache__/
+Pipfile.lock

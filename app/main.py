@@ -6,7 +6,7 @@ def readImageFromDisk(path):
     """
     readImageFromDisk
 
-    :param path:
+    :param path: str
     image path
 
     :return:
@@ -78,12 +78,12 @@ def predict(x):
 
 
 # train()
-X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
+# X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
 # X_train, X_test = normalize(X_train_orig,X_test_orig)
 #
-img1 = readImageFromDisk("/Users/doom/Documents/d5c94724-78ce-4b63-bab2-304ee3323c4dcat1_2.jpeg")
-img2 = readImageFromDisk("/Users/doom/Documents/c171ca3b-978e-4888-ae88-28507c97996ecat1_2.jpeg")
-img = np.reshape(img2, (1, 64, 64, 3))
+# img1 = readImageFromDisk("/Users/doom/Documents/d5c94724-78ce-4b63-bab2-304ee3323c4dcat1_2.jpeg")
+# img2 = readImageFromDisk("/Users/doom/Documents/c171ca3b-978e-4888-ae88-28507c97996ecat1_2.jpeg")
+# img = np.reshape(img2, (1, 64, 64, 3))
 # plt.figure()
 # plt.subplot(2,2,1)
 # plt.imshow(X_test_orig[3])
@@ -94,8 +94,8 @@ img = np.reshape(img2, (1, 64, 64, 3))
 # plt.subplot(2,2,4)
 # plt.imshow(img2)
 # plt.show()
-y_predict = predict(img)
-print("y_predict:\n", y_predict)
+# y_predict = predict(X_test)
+# print("y_predict:\n", y_predict)
 
 
 def test():
@@ -109,3 +109,25 @@ def test():
         z = tf.contrib.layers.fully_connected(P2, 2, activation_fn=None)
         print(z.eval())
 
+
+
+if __name__ == '__main__':
+    # train()
+    X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
+    X_train, X_test = normalize(X_train_orig, X_test_orig)
+
+    # plt.figure()
+    # plt.subplot(2,2,1)
+    # plt.imshow(X_test_orig[3])
+    # plt.subplot(2,2,2)
+    # plt.imshow(X_test_orig[4])
+    # plt.subplot(2,2,3)
+    # plt.imshow(img1)
+    # plt.subplot(2,2,4)
+    # plt.imshow(img2)
+    # plt.show()
+
+    y_predict = predict(X_test_orig)
+
+    print(X_test_orig.shape)
+    print("y_predict:\n", y_predict)
