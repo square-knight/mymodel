@@ -1,0 +1,2 @@
+model_checkpoint_path: "finger-model"
+all_model_checkpoint_paths: "finger-model"
