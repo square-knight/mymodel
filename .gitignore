@@ -7,7 +7,7 @@
 *.prof
 *.cprof
 .DS_Store
-/.idea/*
+.idea/*
 .idea/*.xml
 .vscode/
 __pycache__/
