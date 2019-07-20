@@ -1,0 +1,131 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#DDDDDD"
+    tools:context=".MainActivity" >
+
+    <SurfaceView
+        android:id="@+id/surfaceView1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentStart="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:clickable="true"
+        android:layout_alignParentTop="true">
+    </SurfaceView>
+    <RelativeLayout
+        android:id="@+id/photoFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10px">
+        <LinearLayout
+            android:layout_width="3px"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:background="#FB880A"
+            />
+        <LinearLayout
+            android:layout_width="3px"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:background="#FB880A"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="3px"
+            android:layout_alignParentTop="true"
+            android:background="#FB880A"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="3px"
+            android:layout_alignParentBottom="true"
+            android:background="#FB880A"
+            />
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/numberTextView"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="15dp"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:text="" />
+    <TextView
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/photoFrameLayout"
+        android:layout_marginTop="3dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:fontFamily=""
+        android:textColor="#FB880A"
+        android:text="框内为有效区哦" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+
+        <Button
+            android:id="@+id/trainButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:background="#4FF1F1F1"
+            android:text="@string/train_start" />
+
+        <LinearLayout
+            android:id="@+id/collectLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:orientation="horizontal">
+            <Switch
+                android:id="@+id/collectSwitch"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:checked="false"
+                android:minWidth="40dp"
+                android:textSize="16sp"
+                android:text="收集开关" />
+            <EditText
+                android:id="@+id/collectEditText"
+                android:layout_width="0dp"
+                android:layout_marginStart="5dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="number"
+                android:hint="组别ID"/>
+        </LinearLayout>
+        <EditText
+            android:id="@+id/uriEditText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textUri"
+            android:layout_marginBottom="15dp"
+            android:hint="server url"/>
+
+
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>
