@@ -8,7 +8,7 @@
 *.cprof
 .DS_Store
 /.idea/*
-idea/*.xml
+.idea/*.xml
 .vscode/
 __pycache__/
 Pipfile.lock
