@@ -12,5 +12,3 @@ REDIS_CONFIG = {
     'port': 6379,
 }
 
-if __name__ == '__main__':
-    pass

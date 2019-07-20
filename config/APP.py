@@ -10,6 +10,7 @@
 app 的配置文件路径
 """
 
+# 放置图片的路径
 images_path = "/Users/frank/PycharmProjects/mymodel/images"
 
 if __name__ == '__main__':
