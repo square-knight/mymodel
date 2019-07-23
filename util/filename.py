@@ -20,8 +20,7 @@ def gen_image_filename():
     """
     timestamp = str(now_to_timestamp())
     new_id = str(generator.gen_id())
-    filename = timestamp + new_id + '.png'
-
+    filename = timestamp + new_id + '.jpg'
     return filename
 
 

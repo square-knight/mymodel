@@ -1,4 +1,7 @@
-from app.cnn_utils import *
+from tensorflow.python.framework import ops
+import tensorflow as tf
+from app.cnn_utils import random_mini_batches
+
 
 def model1(x, y, session, model_name,
            learning_rate=0.003,
@@ -94,8 +97,6 @@ def model1(x, y, session, model_name,
         # print("Test Accuracy:", test_accuracy)
 
         return train_accuracy, test_accuracy, parameters, costs
-
-
 
 
 def splitDataToTrainAndTest(x, y):
@@ -235,6 +236,7 @@ def normalize(X_train_orig, X_test_orig):
 def normalize1(x):
     x = x / 255
     return x
+
 
 def create_placeholders(n_H0, n_W0, n_C0, n_y):
     """

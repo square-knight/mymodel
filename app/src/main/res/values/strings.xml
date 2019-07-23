@@ -1,7 +1,0 @@
-<resources>
-    <string name="app_name">OhMyFinger</string>
-    <string name="train_start">开始训练</string>
-    <string name="training1">训练中…</string>
-    <string name="training2">训练中……</string>
-    <string name="train_over">训练结束</string>
-</resources>
