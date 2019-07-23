@@ -10,6 +10,7 @@ import logging
 import os
 from io import BytesIO
 from flask import request
+
 import numpy as np
 from PIL import Image
 
@@ -24,7 +25,7 @@ from app.myblueprint import web
 logger = logging.getLogger(__name__)
 
 
-@web.route('/upload', methods=['GET', 'POST'])
+@web.route('/upload1111_test', methods=['GET', 'POST'])
 def upload_file():
     logger.info(f"request: {request}")
 
@@ -47,21 +48,37 @@ def upload_file():
 
 @web.route('/predict', methods=["POST", "GET"])
 def predict_model():
-    request_json = request.json
+    logger.info(f"request: {request}")
+
+    file = request.get_data()
+    if not file:
+        return "no file error !"
+    image = Image.open(BytesIO(file))
+    # print(f"image:{image}")
+    # logger.info(f"content_type: {request.content_type}")
+
+    filename = gen_image_filename()
+
+    absolute_path = os.path.join(images_path, filename)
+    image.save(absolute_path)
+
+    message = f"图片已经保存. path: {absolute_path},filename:{filename}"
+    logger.info(message)
 
     # 1 download picture
 
     # 2  readImageFromDisk  读文件
 
-    image = readImageFromDisk(path="./images/")
+    image = readImageFromDisk(path=absolute_path)
 
     # predict
     img = np.reshape(image, (1, 64, 64, 3))
 
     y_predict = predict(img)
 
-    print(image.shape)
-    print("y_predict:\n", y_predict)
+    # print(image.shape)
+    logger.info(f"y_predict: {y_predict}")
+    return str(y_predict)
 
 
 @web.route('/upload11111', methods=['GET', 'POST'])

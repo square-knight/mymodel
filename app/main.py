@@ -1,6 +1,17 @@
-from app.model import *
-import scipy
 
+import numpy as np
+from matplotlib import pyplot as plt
+from app.cnn_utils import convert_to_one_hot, load_dataset
+from app.model import normalize, normalize1, model1, model
+import tensorflow as tf
+
+"""
+# from app.model import *
+
+import scipy
+import scipy.misc
+
+"""
 
 def readImageFromDisk(path):
     """
@@ -13,21 +24,20 @@ def readImageFromDisk(path):
     ndarray of shape(1, 64, 64, 3)
     """
     image = np.array(plt.imread(path))
-    my_image = scipy.misc.imresize(image, size=(64, 64))
+    # my_image = scipy.misc.imresize(image, size=(64, 64))
     # plt.imshow(image)
     # plt.show()
-    return my_image
+    return image
 
 
 # readImageFromDisk("/Users/doom/Documents/0b0ae651-4dd0-4590-afc9-a4077da14bc7cat1_2.jpeg")
 
 def train():
-
     # load dataset
     X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
 
     # normalize x
-    X_train, X_test = normalize(X_train_orig,X_test_orig)
+    X_train, X_test = normalize(X_train_orig, X_test_orig)
 
     # convert y to one hot
     Y_train = convert_to_one_hot(Y_train_orig, 6).T
@@ -43,7 +53,7 @@ def train():
         X_train, Y_train, X_test, Y_test,
         learning_rate=learning_rate, num_epochs=num_epochs, minibatch_size=minibatch_size, lambd=lambd)
     # save the model
-    
+
     # print accuracy
     print("Train Accuracy:", train_accuracy)
     print("Test Accuracy:", test_accuracy)
@@ -55,7 +65,7 @@ def train():
     plt.show()
 
 
-def retrain(x_orig,y_orig,model_identifier=None):
+def retrain(x_orig, y_orig, model_identifier=None):
     x = normalize1(x_orig)
     y = convert_to_one_hot(y_orig).T
 
@@ -90,7 +100,6 @@ def retrain(x_orig,y_orig,model_identifier=None):
 
 
 def predict(x, model_identifier=None):
-
     """
     predit number of fingers in the picture
 
@@ -103,8 +112,8 @@ def predict(x, model_identifier=None):
     x = normalize1(x)
     with tf.Session() as sess:
         model_name = getModelName(model_identifier)
-        saver = tf.train.import_meta_graph('../resource/model/' + model_name + 'meta')
-        saver.restore(sess, tf.train.latest_checkpoint('../resource/model/'))
+        saver = tf.train.import_meta_graph('./resource/model/' + model_name + '.meta')
+        saver.restore(sess, tf.train.latest_checkpoint('./resource/model/'))
         graph = tf.get_default_graph()
         X = graph.get_tensor_by_name("X:0")
         predict_op = graph.get_tensor_by_name("predict_op:0")
@@ -117,6 +126,8 @@ def getModelName(model_identifier=None):
     if model_identifier is not None:
         model_name = model_name + '-' + model_identifier
     return model_name
+
+
 # train()
 # X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
 # X_train, X_test = normalize(X_train_orig,X_test_orig)
@@ -139,16 +150,14 @@ def getModelName(model_identifier=None):
 
 
 def test():
-
     with tf.Session() as sess:
         init = tf.global_variables_initializer()
         sess.run(init)
-        P2 = [[1.0,2.0,3.0],[4.0,5.0,6.0]]
+        P2 = [[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]]
         P2 = tf.contrib.layers.flatten(inputs=P2)
         print(P2.eval())
         z = tf.contrib.layers.fully_connected(P2, 2, activation_fn=None)
         print(z.eval())
-
 
 
 if __name__ == '__main__':
