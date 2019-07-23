@@ -1,5 +1,112 @@
 from app.cnn_utils import *
 
+def model1(x, y, session, model_name,
+           learning_rate=0.003,
+           num_epochs=200, minibatch_size=128, lambd=None, print_cost=True):
+    """
+    Implements a three-layer ConvNet in Tensorflow:
+    CONV2D -> RELU -> MAXPOOL -> CONV2D -> RELU -> MAXPOOL -> FLATTEN -> FULLYCONNECTED
+
+    Arguments:
+    X_train -- training set, of shape (None, 64, 64, 3)
+    Y_train -- test set, of shape (None, n_y = 6)
+    X_test -- training set, of shape (None, 64, 64, 3)
+    Y_test -- test set, of shape (None, n_y = 6)
+    learning_rate -- learning rate of the optimization
+    num_epochs -- number of epochs of the optimization loop
+    minibatch_size -- size of a minibatch
+    print_cost -- True to print the cost every 100 epochs
+
+    Returns:
+    train_accuracy -- real number, accuracy on the train set (X_train)
+    test_accuracy -- real number, testing accuracy on the test set (X_test)
+    parameters -- parameters learnt by the model. They can then be used to predict.
+    """
+
+    seed = 3  # to keep results consistent (numpy seed)
+    # (m, n_H0, n_W0, n_C0) = X_train.shape
+    # n_y = Y_train.shape[1]
+    costs = []  # To keep track of the cost
+
+    X_train, Y_train, X_test, Y_test = splitDataToTrainAndTest(x, y)
+    m = Y_train.shape[0]
+    # Create Placeholders of the correct shape
+    graph = tf.get_default_graph()
+    X = graph.get_tensor_by_name("X:0")
+    Y = graph.get_tensor_by_name("Y:0")
+    # Initialize parameters
+    W1 = graph.get_tensor_by_name("W1:0")
+    W2 = graph.get_tensor_by_name("W2:0")
+    parameters = {"W1": W1,
+                  "W2": W2}
+
+    # Cost function: Add cost function to tensorflow graph
+    cost = graph.get_tensor_by_name("cost:0")
+    if lambd is not None:
+        cost = compute_cost_reg(cost, parameters, lambd=lambd)
+
+    # Backpropagation: Define the tensorflow optimizer. Use an AdamOptimizer that minimizes the cost.
+    optimizer = graph.get_tensor_by_name("Adam:0").minimize(cost)
+
+    # create a saver
+    saver = tf.train.Saver()
+
+    # Start the session to compute the tensorflow graph
+    with tf.Session() as sess:
+
+        # Do the training loop
+        for epoch in range(num_epochs):
+
+            minibatch_cost = 0.
+            num_minibatches = int(m / minibatch_size)  # number of minibatches of size minibatch_size in the train set
+            seed = seed + 1
+            minibatches = random_mini_batches(X_train, Y_train, minibatch_size, seed)
+
+            for minibatch in minibatches:
+                # Select a minibatch
+                (minibatch_X, minibatch_Y) = minibatch
+                # IMPORTANT: The line that runs the graph on a minibatch.
+                # Run the session to execute the optimizer and the cost, the feedict should contain a minibatch for (X,Y).
+                ### START CODE HERE ### (1 line)
+                _, temp_cost = sess.run([optimizer, cost], feed_dict={X: minibatch_X, Y: minibatch_Y})
+                ### END CODE HERE ###
+
+                minibatch_cost += temp_cost / num_minibatches
+
+            # Print the cost every epoch
+            if print_cost == True and epoch % 5 == 0:
+                print("Cost after epoch %i: %f" % (epoch, minibatch_cost))
+            if print_cost == True and epoch % 1 == 0:
+                costs.append(minibatch_cost)
+
+        # Calculate the correct predictions
+        predict_op = graph.get_tensor_by_name("predict_op:0")
+        saver.save(sess, '../resource/model/' + model_name)
+
+        correct_prediction = tf.equal(predict_op, tf.argmax(Y, 1))
+
+        # Calculate accuracy on the test set
+        accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
+        # print(accuracy)
+        train_accuracy = accuracy.eval({X: X_train, Y: Y_train})
+        test_accuracy = accuracy.eval({X: X_test, Y: Y_test})
+        # print("Train Accuracy:", train_accuracy)
+        # print("Test Accuracy:", test_accuracy)
+
+        return train_accuracy, test_accuracy, parameters, costs
+
+
+
+
+def splitDataToTrainAndTest(x, y):
+    m = x.shape[0]
+    m_train = int(m * 0.8)
+    x_train = x[0: m_train, :, :, :]
+    y_train = y[0: m_train, :]
+    x_test = x[m_train: m, :, :, :]
+    y_test = y[m_train: m]
+    return x_train, y_train, x_test, y_test
+
 
 def model(X_train, Y_train, X_test, Y_test, learning_rate=0.003,
           num_epochs=200, minibatch_size=128, lambd=None, print_cost=True):
@@ -50,7 +157,8 @@ def model(X_train, Y_train, X_test, Y_test, learning_rate=0.003,
     if lambd is None:
         cost = compute_cost(Z3, Y)
     else:
-        cost = compute_cost_reg(Z3, Y, parameters, lambd=lambd)
+        cost = compute_cost(Z3, Y)
+        cost = compute_cost_reg(cost, parameters, lambd=lambd)
     ### END CODE HERE ###
 
     # Backpropagation: Define the tensorflow optimizer. Use an AdamOptimizer that minimizes the cost.
@@ -224,27 +332,23 @@ def compute_cost(Z3, Y):
     """
 
     ### START CODE HERE ### (1 line of code)
-    cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=Z3, labels=Y))
+    cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=Z3, labels=Y), name='cost')
     ### END CODE HERE ###
 
     return cost
 
 
-def compute_cost_reg(Z3, Y, parameters, lambd):
+def compute_cost_reg(cost, parameters, lambd):
     """
     Computes the cost
 
     Arguments:
-    Z3 -- output of forward propagation (output of the last LINEAR unit), of shape (6, number of examples)
-    Y -- "true" labels vector placeholder, same shape as Z3
+    :cost -- tensor cost without regularizer
+    :parameter -- dict contains W1 W2
 
     Returns:
     cost - Tensor of the cost function
     """
-
-    ### START CODE HERE ### (1 line of code)
-    cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=Z3, labels=Y))
-    ### END CODE HERE ###
     W1 = parameters['W1']
     W2 = parameters['W2']
     cost = cost + tf.contrib.layers.l2_regularizer(lambd)(W1) \

@@ -55,7 +55,41 @@ def train():
     plt.show()
 
 
-def predict(x):
+def retrain(x_orig,y_orig,model_identifier=None):
+    x = normalize1(x_orig)
+    y = convert_to_one_hot(y_orig).T
+
+    # hyperparameters
+    learning_rate = 0.003
+    num_epochs = 50
+    minibatch_size = 20
+    lambd = 0.003
+
+    train_accuracy = 0.
+    test_accuracy = 0.
+    parameters = {}
+    costs = []
+
+    with tf.Session() as sess:
+        model_name = getModelName(model_identifier)
+        saver = tf.train.import_meta_graph('../resource/model/' + model_name + 'meta')
+        saver.restore(sess, tf.train.latest_checkpoint('../resource/model/'))
+        # train
+        train_accuracy, test_accuracy, parameters, costs = model1(
+            x, y, sess, model_name,
+            learning_rate=learning_rate, num_epochs=num_epochs, minibatch_size=minibatch_size, lambd=lambd)
+    # print accuracy
+    print("Train Accuracy:", train_accuracy)
+    print("Test Accuracy:", test_accuracy)
+    # plot the cost
+    plt.plot(np.squeeze(costs))
+    plt.ylabel('cost')
+    plt.xlabel('iterations (per tens)')
+    plt.title("Learning rate =" + str(learning_rate))
+    plt.show()
+
+
+def predict(x, model_identifier=None):
 
     """
     predit number of fingers in the picture
@@ -68,7 +102,8 @@ def predict(x):
 
     x = normalize1(x)
     with tf.Session() as sess:
-        saver = tf.train.import_meta_graph('../resource/model/finger-model.meta')
+        model_name = getModelName(model_identifier)
+        saver = tf.train.import_meta_graph('../resource/model/' + model_name + 'meta')
         saver.restore(sess, tf.train.latest_checkpoint('../resource/model/'))
         graph = tf.get_default_graph()
         X = graph.get_tensor_by_name("X:0")
@@ -77,6 +112,11 @@ def predict(x):
         return predict_op.eval({X: x})
 
 
+def getModelName(model_identifier=None):
+    model_name = 'finger-model'
+    if model_identifier is not None:
+        model_name = model_name + '-' + model_identifier
+    return model_name
 # train()
 # X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
 # X_train, X_test = normalize(X_train_orig,X_test_orig)
@@ -114,20 +154,9 @@ def test():
 if __name__ == '__main__':
     # train()
     X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
-    X_train, X_test = normalize(X_train_orig, X_test_orig)
-
-    # plt.figure()
-    # plt.subplot(2,2,1)
-    # plt.imshow(X_test_orig[3])
-    # plt.subplot(2,2,2)
-    # plt.imshow(X_test_orig[4])
-    # plt.subplot(2,2,3)
-    # plt.imshow(img1)
-    # plt.subplot(2,2,4)
-    # plt.imshow(img2)
-    # plt.show()
-
-    y_predict = predict(X_test_orig)
-
-    print(X_test_orig.shape)
-    print("y_predict:\n", y_predict)
+    #
+    # y_predict = predict(X_test_orig)
+    #
+    # print(X_test_orig.shape)
+    # print("y_predict:\n", y_predict)
+    retrain(X_test_orig, Y_test_orig)
