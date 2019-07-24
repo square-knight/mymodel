@@ -1,6 +1,7 @@
 from tensorflow.python.framework import ops
 import tensorflow as tf
 from app.cnn_utils import random_mini_batches
+from config.APP import model_path
 
 
 def model1(x, y, session, model_name,
@@ -84,7 +85,7 @@ def model1(x, y, session, model_name,
 
         # Calculate the correct predictions
         predict_op = graph.get_tensor_by_name("predict_op:0")
-        saver.save(sess, '../resource/model/' + model_name)
+        saver.save(sess, model_path + model_name)
 
         correct_prediction = tf.equal(predict_op, tf.argmax(Y, 1))
 
@@ -213,7 +214,7 @@ def model(X_train, Y_train, X_test, Y_test, learning_rate=0.003,
 
         # Calculate the correct predictions
         predict_op = tf.argmax(Z3, 1, name='predict_op')
-        saver.save(sess, '../resource/model/finger-model')
+        saver.save(sess, model_path + "finger-model")
         correct_prediction = tf.equal(predict_op, tf.argmax(Y, 1))
 
         # Calculate accuracy on the test set

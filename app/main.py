@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 from app.cnn_utils import convert_to_one_hot, load_dataset
 from app.model import normalize, normalize1, model1, model
 import tensorflow as tf
+from config.APP import model_path
 
 """
 # from app.model import *
@@ -47,7 +48,7 @@ def train():
     learning_rate = 0.003
     num_epochs = 200
     minibatch_size = 64
-    lambd = 0.003
+    lambd = None #0.03-0.9-0.85;0.003-0.98-0.89;0.002-0.978-0.875;0.001-0.98-0.9
     # train
     train_accuracy, test_accuracy, parameters, costs = model(
         X_train, Y_train, X_test, Y_test,
@@ -67,7 +68,7 @@ def train():
 
 def retrain(x_orig, y_orig, model_identifier=None):
     x = normalize1(x_orig)
-    y = convert_to_one_hot(y_orig).T
+    y = convert_to_one_hot(y_orig, 6).T
 
     # hyperparameters
     learning_rate = 0.003
@@ -82,8 +83,8 @@ def retrain(x_orig, y_orig, model_identifier=None):
 
     with tf.Session() as sess:
         model_name = getModelName(model_identifier)
-        saver = tf.train.import_meta_graph('../resource/model/' + model_name + 'meta')
-        saver.restore(sess, tf.train.latest_checkpoint('../resource/model/'))
+        saver = tf.train.import_meta_graph(model_path + model_name + '.meta')
+        saver.restore(sess, tf.train.latest_checkpoint(model_path))
         # train
         train_accuracy, test_accuracy, parameters, costs = model1(
             x, y, sess, model_name,
@@ -112,8 +113,8 @@ def predict(x, model_identifier=None):
     x = normalize1(x)
     with tf.Session() as sess:
         model_name = getModelName(model_identifier)
-        saver = tf.train.import_meta_graph('./resource/model/' + model_name + '.meta')
-        saver.restore(sess, tf.train.latest_checkpoint('./resource/model/'))
+        saver = tf.train.import_meta_graph(model_path + model_name + '.meta')
+        saver.restore(sess, tf.train.latest_checkpoint(model_path))
         graph = tf.get_default_graph()
         X = graph.get_tensor_by_name("X:0")
         predict_op = graph.get_tensor_by_name("predict_op:0")
@@ -161,11 +162,11 @@ def test():
 
 
 if __name__ == '__main__':
-    # train()
-    X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
+    train()
+    # X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
     #
     # y_predict = predict(X_test_orig)
     #
     # print(X_test_orig.shape)
     # print("y_predict:\n", y_predict)
-    retrain(X_test_orig, Y_test_orig)
+    # retrain(X_test_orig, Y_test_orig)
