@@ -12,6 +12,7 @@ app 的配置文件路径
 
 # 放置图片的路径
 images_path = "/Users/doom/local/python_workspace/hand_figure/images"
+images_path_train = "/Users/doom/local/python_workspace/hand_figure/images"
 model_path = "/Users/doom/local/python_workspace/hand_figure/resource/model/"
 if __name__ == '__main__':
     pass

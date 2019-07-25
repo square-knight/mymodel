@@ -45,47 +45,48 @@ def model1(x, y, session, model_name,
                   "W2": W2}
 
     # Cost function: Add cost function to tensorflow graph
-    cost = graph.get_tensor_by_name("cost:0")
-    if lambd is not None:
-        cost = compute_cost_reg(cost, parameters, lambd=lambd)
+    # cost = graph.get_tensor_by_name("cost:0")
+    # if lambd is not None:
+    #     cost = compute_cost_reg(cost, parameters, lambd=lambd)
 
     # Backpropagation: Define the tensorflow optimizer. Use an AdamOptimizer that minimizes the cost.
-    optimizer = graph.get_tensor_by_name("Adam:0").minimize(cost)
+
+    # optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
     # create a saver
     saver = tf.train.Saver()
 
     # Start the session to compute the tensorflow graph
-    with tf.Session() as sess:
+    # with tf.Session() as sess:
 
-        # Do the training loop
-        for epoch in range(num_epochs):
+    # Do the training loop
+    for epoch in range(num_epochs):
 
-            minibatch_cost = 0.
-            num_minibatches = int(m / minibatch_size)  # number of minibatches of size minibatch_size in the train set
-            seed = seed + 1
-            minibatches = random_mini_batches(X_train, Y_train, minibatch_size, seed)
+        minibatch_cost = 0.
+        num_minibatches = int(m / minibatch_size)  # number of minibatches of size minibatch_size in the train set
+        seed = seed + 1
+        minibatches = random_mini_batches(X_train, Y_train, minibatch_size, seed)
 
-            for minibatch in minibatches:
-                # Select a minibatch
-                (minibatch_X, minibatch_Y) = minibatch
-                # IMPORTANT: The line that runs the graph on a minibatch.
-                # Run the session to execute the optimizer and the cost, the feedict should contain a minibatch for (X,Y).
-                ### START CODE HERE ### (1 line)
-                _, temp_cost = sess.run([optimizer, cost], feed_dict={X: minibatch_X, Y: minibatch_Y})
-                ### END CODE HERE ###
+        for minibatch in minibatches:
+            # Select a minibatch
+            (minibatch_X, minibatch_Y) = minibatch
+            # IMPORTANT: The line that runs the graph on a minibatch.
+            # Run the session to execute the optimizer and the cost, the feedict should contain a minibatch for (X,Y).
+            ### START CODE HERE ### (1 line)
+            _, temp_cost = session.run(graph.get_collection("opt"), feed_dict={X: minibatch_X, Y: minibatch_Y})
+            ### END CODE HERE ###
 
-                minibatch_cost += temp_cost / num_minibatches
+            minibatch_cost += temp_cost / num_minibatches
 
-            # Print the cost every epoch
-            if print_cost == True and epoch % 5 == 0:
-                print("Cost after epoch %i: %f" % (epoch, minibatch_cost))
-            if print_cost == True and epoch % 1 == 0:
-                costs.append(minibatch_cost)
+        # Print the cost every epoch
+        if print_cost == True and epoch % 5 == 0:
+            print("Cost after epoch %i: %f" % (epoch, minibatch_cost))
+        if print_cost == True and epoch % 1 == 0:
+            costs.append(minibatch_cost)
 
         # Calculate the correct predictions
         predict_op = graph.get_tensor_by_name("predict_op:0")
-        saver.save(sess, model_path + model_name)
+        saver.save(session, model_path + model_name)
 
         correct_prediction = tf.equal(predict_op, tf.argmax(Y, 1))
 
@@ -97,7 +98,7 @@ def model1(x, y, session, model_name,
         # print("Train Accuracy:", train_accuracy)
         # print("Test Accuracy:", test_accuracy)
 
-        return train_accuracy, test_accuracy, parameters, costs
+    return train_accuracy, test_accuracy, parameters, costs
 
 
 def splitDataToTrainAndTest(x, y):
@@ -166,6 +167,8 @@ def model(X_train, Y_train, X_test, Y_test, learning_rate=0.003,
     # Backpropagation: Define the tensorflow optimizer. Use an AdamOptimizer that minimizes the cost.
     ### START CODE HERE ### (1 line)
     optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
+    tf.add_to_collection("opt", optimizer)
+    tf.add_to_collection("opt", cost)
     ### END CODE HERE ###
 
     # Initialize all the variables globally
@@ -194,7 +197,7 @@ def model(X_train, Y_train, X_test, Y_test, learning_rate=0.003,
                 # IMPORTANT: The line that runs the graph on a minibatch.
                 # Run the session to execute the optimizer and the cost, the feedict should contain a minibatch for (X,Y).
                 ### START CODE HERE ### (1 line)
-                _, temp_cost = sess.run([optimizer, cost], feed_dict={X: minibatch_X, Y: minibatch_Y})
+                _, temp_cost = sess.run(tf.get_collection("opt"), feed_dict={X: minibatch_X, Y: minibatch_Y})
                 ### END CODE HERE ###
 
                 minibatch_cost += temp_cost / num_minibatches

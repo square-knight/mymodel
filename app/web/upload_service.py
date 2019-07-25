@@ -17,7 +17,7 @@ from PIL import Image
 from app.main import predict
 from app.main import readImageFromDisk
 
-from config.APP import images_path
+from config.APP import images_path, images_path_train
 from util.filename import gen_image_filename
 
 from app.myblueprint import web
@@ -50,6 +50,7 @@ def upload_file():
 def predict_model():
     logger.info(f"request: {request}")
 
+    logger.info(request.headers)
     file = request.get_data()
     if not file:
         return "no file error !"
@@ -79,6 +80,33 @@ def predict_model():
     # print(image.shape)
     logger.info(f"y_predict: {y_predict}")
     return str(y_predict)
+
+
+@web.route('/collect', methods=["POST", "GET"])
+def collect_img():
+    y = request.headers['y']
+    if y < 0 or y > 5:
+        return "not 0-5 error!"
+    file = request.get_data()
+    if not file:
+        return "no file error !"
+    image = Image.open(BytesIO(file))
+
+    filename = gen_image_filename()
+    filename = y + "-" + filename
+    absolute_path = os.path.join(images_path_train, filename)
+    image.save(absolute_path)
+
+    message = f"图片已经保存. path: {absolute_path},filename:{filename}"
+    logger.info(message)
+
+    return "ok"
+
+
+@web.route('/train', methods=["POST", "GET"])
+def train():
+
+    return "ok"
 
 
 @web.route('/upload11111', methods=['GET', 'POST'])

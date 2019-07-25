@@ -1,6 +1,6 @@
 
 import numpy as np
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
 from app.cnn_utils import convert_to_one_hot, load_dataset
 from app.model import normalize, normalize1, model1, model
 import tensorflow as tf
@@ -48,7 +48,7 @@ def train():
     learning_rate = 0.003
     num_epochs = 200
     minibatch_size = 64
-    lambd = None #0.03-0.9-0.85;0.003-0.98-0.89;0.002-0.978-0.875;0.001-0.98-0.9
+    lambd = None #0.03-0.9-0.85;0.01-0.92-0.89;0.006-0.96-0.86;0.003-0.98-0.89;0.002-0.978-0.875;0.001-0.98-0.9;none-0.98-0.89
     # train
     train_accuracy, test_accuracy, parameters, costs = model(
         X_train, Y_train, X_test, Y_test,
@@ -72,9 +72,9 @@ def retrain(x_orig, y_orig, model_identifier=None):
 
     # hyperparameters
     learning_rate = 0.003
-    num_epochs = 50
-    minibatch_size = 20
-    lambd = 0.003
+    num_epochs = 100
+    minibatch_size = 64
+    lambd = None
 
     train_accuracy = 0.
     test_accuracy = 0.
@@ -162,11 +162,13 @@ def test():
 
 
 if __name__ == '__main__':
-    train()
-    # X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
+    # train()
+    X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
+    retrain(X_train_orig, Y_train_orig)
     #
     # y_predict = predict(X_test_orig)
     #
     # print(X_test_orig.shape)
     # print("y_predict:\n", y_predict)
-    # retrain(X_test_orig, Y_test_orig)
+
+
