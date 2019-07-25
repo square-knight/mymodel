@@ -85,7 +85,8 @@ def predict_model():
 @web.route('/collect', methods=["POST", "GET"])
 def collect_img():
     y = request.headers['y']
-    if y < 0 or y > 5:
+    yi = int(y)
+    if yi < 0 or yi > 5:
         return "not 0-5 error!"
     file = request.get_data()
     if not file:
@@ -93,7 +94,7 @@ def collect_img():
     image = Image.open(BytesIO(file))
 
     filename = gen_image_filename()
-    filename = y + "-" + filename
+    filename = y + "_" + filename
     absolute_path = os.path.join(images_path_train, filename)
     image.save(absolute_path)
 
