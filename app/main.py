@@ -4,8 +4,10 @@ import matplotlib.pyplot as plt
 from app.cnn_utils import convert_to_one_hot, load_dataset
 from app.model import normalize, normalize1, model1, model
 import tensorflow as tf
-from config.APP import model_path
-
+from config.APP import model_path, images_path_train
+import os
+import logging
+logger = logging.getLogger(__name__)
 """
 # from app.model import *
 
@@ -22,13 +24,30 @@ def readImageFromDisk(path):
     image path
 
     :return:
-    ndarray of shape(1, 64, 64, 3)
+    ndarray of shape(64, 64, 3)
     """
     image = np.array(plt.imread(path))
     # my_image = scipy.misc.imresize(image, size=(64, 64))
     # plt.imshow(image)
     # plt.show()
     return image
+
+
+def imgsToTrainSet(img_dir):
+    x = []
+    y = []
+    if os.path.isdir(img_dir):
+        for img_name in os.listdir(img_dir):
+            img_path = os.path.join(img_dir, img_name)
+            img = readImageFromDisk(img_path)
+            group = img_name[0: 1]
+            x.append(img)
+            y.append(int(group))
+    else:
+        logger.error("is not path")
+    x = np.array(x, dtype=np.int32)
+    y = np.array(y, dtype=np.int32)[np.newaxis, :]
+    return x, y
 
 
 # readImageFromDisk("/Users/doom/Documents/0b0ae651-4dd0-4590-afc9-a4077da14bc7cat1_2.jpeg")
@@ -164,7 +183,9 @@ def test():
 if __name__ == '__main__':
     # train()
     X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
-    retrain(X_train_orig, Y_train_orig)
+    print(X_train_orig.shape)
+    print(Y_train_orig.shape)
+    # retrain(X_train_orig, Y_train_orig)
     #
     # y_predict = predict(X_test_orig)
     #
@@ -172,3 +193,19 @@ if __name__ == '__main__':
     # print("y_predict:\n", y_predict)
 
 
+
+    x, y = imgsToTrainSet(images_path_train)
+    print(x.shape)
+    print(y.shape)
+    # print(y[0, 105:107])
+    # print(y[0, 28])
+    # plt.figure()
+    # plt.subplot(2,2,1)
+    # plt.imshow(x[13])
+    # plt.subplot(2,2,2)
+    # plt.imshow(x[28])
+    # plt.subplot(2,2,3)
+    # plt.imshow(x[105])
+    # plt.subplot(2,2,4)
+    # plt.imshow(x[106])
+    # plt.show()
