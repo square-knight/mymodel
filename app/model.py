@@ -2,9 +2,10 @@ from tensorflow.python.framework import ops
 import tensorflow as tf
 from app.cnn_utils import random_mini_batches
 from config.APP import model_path
+import numpy as np
 
 
-def model1(x, y, session, model_name,
+def model1(X_train, Y_train, X_test, Y_test, session, model_name,
            learning_rate=0.003,
            num_epochs=200, minibatch_size=128, lambd=None, print_cost=True):
     """
@@ -27,13 +28,13 @@ def model1(x, y, session, model_name,
     parameters -- parameters learnt by the model. They can then be used to predict.
     """
 
-    seed = 3  # to keep results consistent (numpy seed)
+    seed = 1100  # to keep results consistent (numpy seed)
     # (m, n_H0, n_W0, n_C0) = X_train.shape
     # n_y = Y_train.shape[1]
     costs = []  # To keep track of the cost
 
-    X_train, Y_train, X_test, Y_test = splitDataToTrainAndTest(x, y)
-    m = Y_train.shape[0]
+
+    m = X_train.shape[0]
     # Create Placeholders of the correct shape
     graph = tf.get_default_graph()
     X = graph.get_tensor_by_name("X:0")
@@ -84,30 +85,36 @@ def model1(x, y, session, model_name,
         if print_cost == True and epoch % 1 == 0:
             costs.append(minibatch_cost)
 
-        # Calculate the correct predictions
-        predict_op = graph.get_tensor_by_name("predict_op:0")
-        saver.save(session, model_path + model_name)
+    # Calculate the correct predictions
+    predict_op = graph.get_tensor_by_name("predict_op:0")
+    saver.save(session, model_path + model_name)
 
-        correct_prediction = tf.equal(predict_op, tf.argmax(Y, 1))
+    correct_prediction = tf.equal(predict_op, tf.argmax(Y, 1))
 
-        # Calculate accuracy on the test set
-        accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-        # print(accuracy)
-        train_accuracy = accuracy.eval({X: X_train, Y: Y_train})
-        test_accuracy = accuracy.eval({X: X_test, Y: Y_test})
-        # print("Train Accuracy:", train_accuracy)
-        # print("Test Accuracy:", test_accuracy)
+    # Calculate accuracy on the test set
+    accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
+    # print(accuracy)
+    train_accuracy = accuracy.eval({X: X_train, Y: Y_train})
+    test_accuracy = accuracy.eval({X: X_test, Y: Y_test})
+    # print("Train Accuracy:", train_accuracy)
+    # print("Test Accuracy:", test_accuracy)
 
     return train_accuracy, test_accuracy, parameters, costs
 
 
 def splitDataToTrainAndTest(x, y):
-    m = x.shape[0]
+    m = x.shape[0]  # number of training examples
+    # Step 1: Shuffle (X, Y)
+    permutation = list(np.random.permutation(m))
+    shuffled_x = x[permutation, :, :, :]
+    shuffled_y = y[:, permutation]
+
     m_train = int(m * 0.8)
-    x_train = x[0: m_train, :, :, :]
-    y_train = y[0: m_train, :]
-    x_test = x[m_train: m, :, :, :]
-    y_test = y[m_train: m]
+    x_train = shuffled_x[0: m_train, :, :, :]
+    y_train = shuffled_y[:, 0: m_train]
+    x_test = shuffled_x[m_train: m, :, :, :]
+    y_test = shuffled_y[:, m_train: m]
+    print(permutation[0:100])
     return x_train, y_train, x_test, y_test
 
 

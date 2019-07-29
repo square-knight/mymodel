@@ -2,7 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from app.cnn_utils import convert_to_one_hot, load_dataset
-from app.model import normalize, normalize1, model1, model
+from app.model import normalize, normalize1, model1, model, splitDataToTrainAndTest
 import tensorflow as tf
 from config.APP import model_path, images_path_train
 import os
@@ -52,10 +52,10 @@ def imgsToTrainSet(img_dir):
 
 # readImageFromDisk("/Users/doom/Documents/0b0ae651-4dd0-4590-afc9-a4077da14bc7cat1_2.jpeg")
 
-def train():
+def train(x, y):
     # load dataset
     X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
-
+    # X_train_orig, Y_train_orig, X_test_orig, Y_test_orig = splitDataToTrainAndTest(x, y)
     # normalize x
     X_train, X_test = normalize(X_train_orig, X_test_orig)
 
@@ -65,7 +65,7 @@ def train():
 
     # hyperparameters
     learning_rate = 0.003
-    num_epochs = 200
+    num_epochs = 150
     minibatch_size = 64
     lambd = None #0.03-0.9-0.85;0.01-0.92-0.89;0.006-0.96-0.86;0.003-0.98-0.89;0.002-0.978-0.875;0.001-0.98-0.9;none-0.98-0.89
     # train
@@ -85,28 +85,35 @@ def train():
     plt.show()
 
 
-def retrain(x_orig, y_orig, model_identifier=None):
-    x = normalize1(x_orig)
-    y = convert_to_one_hot(y_orig, 6).T
+def retrain(x, y, model_identifier=None):
+    # x = normalize1(x_orig)
+    # y = convert_to_one_hot(y_orig, 6).T
 
     # hyperparameters
-    learning_rate = 0.003
+    learning_rate = 0.0003
     num_epochs = 100
     minibatch_size = 64
-    lambd = None
+    lambd = 0.003
 
     train_accuracy = 0.
     test_accuracy = 0.
     parameters = {}
     costs = []
-
+    X_train_orig, Y_train_orig, X_test_orig, Y_test_orig = splitDataToTrainAndTest(x, y)
+    X_train, X_test = normalize(X_train_orig, X_test_orig)
+    Y_train = convert_to_one_hot(Y_train_orig, 6).T
+    Y_test = convert_to_one_hot(Y_test_orig, 6).T
+    print(X_train.shape)
+    print(Y_train.shape)
+    print(X_test.shape)
+    print(Y_test.shape)
     with tf.Session() as sess:
         model_name = getModelName(model_identifier)
         saver = tf.train.import_meta_graph(model_path + model_name + '.meta')
         saver.restore(sess, tf.train.latest_checkpoint(model_path))
         # train
         train_accuracy, test_accuracy, parameters, costs = model1(
-            x, y, sess, model_name,
+            X_train, Y_train, X_test, Y_test, sess, model_name,
             learning_rate=learning_rate, num_epochs=num_epochs, minibatch_size=minibatch_size, lambd=lambd)
     # print accuracy
     print("Train Accuracy:", train_accuracy)
@@ -181,11 +188,12 @@ def test():
 
 
 if __name__ == '__main__':
-    # train()
-    X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
-    print(X_train_orig.shape)
-    print(Y_train_orig.shape)
-    # retrain(X_train_orig, Y_train_orig)
+    x, y = imgsToTrainSet(images_path_train)
+    # train(x, y)
+    retrain(x, y)
+    # X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
+    # print(X_train_orig.shape)
+    # print(Y_train_orig.shape)
     #
     # y_predict = predict(X_test_orig)
     #
@@ -194,18 +202,19 @@ if __name__ == '__main__':
 
 
 
-    x, y = imgsToTrainSet(images_path_train)
-    print(x.shape)
-    print(y.shape)
+
+    # print(x.shape)
+    # print(y.shape)
     # print(y[0, 105:107])
     # print(y[0, 28])
+    # print(Y_test_orig[0,[13, 28, 105, 106]])
     # plt.figure()
     # plt.subplot(2,2,1)
-    # plt.imshow(x[13])
+    # plt.imshow(X_test_orig[13])
     # plt.subplot(2,2,2)
-    # plt.imshow(x[28])
+    # plt.imshow(X_test_orig[28])
     # plt.subplot(2,2,3)
-    # plt.imshow(x[105])
+    # plt.imshow(X_test_orig[105])
     # plt.subplot(2,2,4)
-    # plt.imshow(x[106])
+    # plt.imshow(X_test_orig[106])
     # plt.show()
