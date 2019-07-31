@@ -223,11 +223,11 @@ if __name__ == '__main__':
 
     x, y = imgsToTrainSet(images_path_train)
 
-    num_epochss = [150, 200, 300]
-    starter_learning_rates = [0.1,0.03,0.003,0.001]
+    num_epochss = [200, 300]
+    starter_learning_rates = [0.006,0.003]
     learning_rate_decays = [0.99,0.96,0.9]
     minibatch_sizes = [64,128]
-    lambds = [1,10,30,50,100]
+    lambds = [0,1,100]
 
     iid = 0
     for num_epochs in num_epochss:
