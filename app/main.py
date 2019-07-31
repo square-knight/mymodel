@@ -4,10 +4,12 @@ import matplotlib.pyplot as plt
 from app.cnn_utils import convert_to_one_hot, load_dataset
 from app.model import normalize, normalize1, model1, model, splitDataToTrainAndTest
 import tensorflow as tf
-from config.APP import model_path, images_path_train
+from config.APP import model_path, images_path_train, resource_path
 import os
 import logging
+from util.img_loader import appendALine
 logger = logging.getLogger(__name__)
+
 """
 # from app.model import *
 
@@ -52,10 +54,10 @@ def imgsToTrainSet(img_dir):
 
 # readImageFromDisk("/Users/doom/Documents/0b0ae651-4dd0-4590-afc9-a4077da14bc7cat1_2.jpeg")
 
-def train(x, y):
+def train(x, y, starter_learning_rate,learning_rate_decay,num_epochs=200,minibatch_size=64,lambd=0):
     # load dataset
-    X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
-    # X_train_orig, Y_train_orig, X_test_orig, Y_test_orig = splitDataToTrainAndTest(x, y)
+    # X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
+    X_train_orig, Y_train_orig, X_test_orig, Y_test_orig = splitDataToTrainAndTest(x, y)
     # normalize x
     X_train, X_test = normalize(X_train_orig, X_test_orig)
 
@@ -64,25 +66,38 @@ def train(x, y):
     Y_test = convert_to_one_hot(Y_test_orig, 6).T
 
     # hyperparameters
-    learning_rate = 0.003
-    num_epochs = 150
-    minibatch_size = 64
-    lambd = None #0.03-0.9-0.85;0.01-0.92-0.89;0.006-0.96-0.86;0.003-0.98-0.89;0.002-0.978-0.875;0.001-0.98-0.9;none-0.98-0.89
+    # starter_learning_rate = 0.003
+    # learning_rate_decay = 0.96
+    # num_epochs = 150
+    # minibatch_size = 64
+    # lambd = 50.
+    # 1-0.95-0.74 cost:0.19
+    # 10-0.96-0.78 cost:0.13
+    # 0.1-0.19-0.23
+    # 0.03-0.14-0.14
+    # 0.01-0.14-0.15 cost:0.12
+    # 0.003-0.978-0.875
+    # 0.001-0.98-0.9
+    # 1e-4-0.15-0.16 cost:0.14
+    # 1e-8-0.14-0.15 cost:0.11
+    # none-0.98-0.89
     # train
     train_accuracy, test_accuracy, parameters, costs = model(
         X_train, Y_train, X_test, Y_test,
-        learning_rate=learning_rate, num_epochs=num_epochs, minibatch_size=minibatch_size, lambd=lambd)
+        starter_learning_rate=starter_learning_rate, learning_rate_decay=learning_rate_decay,
+        num_epochs=num_epochs, minibatch_size=minibatch_size, lambd_train=lambd)
     # save the model
 
     # print accuracy
     print("Train Accuracy:", train_accuracy)
     print("Test Accuracy:", test_accuracy)
     # plot the cost
-    plt.plot(np.squeeze(costs))
-    plt.ylabel('cost')
-    plt.xlabel('iterations (per tens)')
-    plt.title("Learning rate =" + str(learning_rate))
-    plt.show()
+    # plt.plot(np.squeeze(costs))
+    # plt.ylabel('cost')
+    # plt.xlabel('iterations (per tens)')
+    # plt.title("Learning rate =" + str(starter_learning_rate))
+    # plt.show()
+    return train_accuracy, test_accuracy, np.squeeze(costs)
 
 
 def retrain(x, y, model_identifier=None):
@@ -188,9 +203,63 @@ def test():
 
 
 if __name__ == '__main__':
+    # x, y = imgsToTrainSet(images_path_train)
+    # x_test = x[0:1,:,:,:]
+    # X = tf.placeholder(name='X', shape=(None, 64, 64, 3), dtype=tf.float32)
+    # lambd = tf.placeholder(name='lambd', dtype=tf.float32)
+    # print(lambd)
+    # z = tf.cond(lambd,lambda: 5,lambda: 4)
+    # W1 = tf.get_variable(name='W1', dtype=tf.float32, shape=(8, 8, 3, 8),
+    #                      initializer=tf.contrib.layers.xavier_initializer(seed=0))
+    # Z1 = tf.nn.conv2d(input=X, filter=W1, strides=(1, 1, 1, 1), padding='SAME')
+    # P1 = tf.nn.max_pool(value=Z1, ksize=(1, 8, 8, 1), strides=(1, 8, 8, 1), padding='SAME')
+    # with tf.Session() as sess:
+    #
+    #     # Run the initialization
+    #     sess.run(tf.global_variables_initializer())
+    #     z = sess.run(P1,feed_dict={X:x_test})
+    #     print(z.shape)
+    #     print(sess.run(z, feed_dict={lambd: 1}))
+
     x, y = imgsToTrainSet(images_path_train)
-    # train(x, y)
-    retrain(x, y)
+
+    num_epochss = [150, 200, 300]
+    starter_learning_rates = [0.1,0.03,0.003,0.001]
+    learning_rate_decays = [0.99,0.96,0.9]
+    minibatch_sizes = [64,128]
+    lambds = [1,10,30,50,100]
+
+    iid = 0
+    for num_epochs in num_epochss:
+        for starter_learning_rate in starter_learning_rates:
+            for learning_rate_decay in learning_rate_decays:
+                for minibatch_size in minibatch_sizes:
+                    for lambd in lambds:
+                        iid = iid + 1
+                        train_accuracy, test_accuracy, costs = train(x, y,
+                                                                     starter_learning_rate,
+                                                                     learning_rate_decay,
+                                                                     num_epochs,
+                                                                     minibatch_size,
+                                                                     lambd)
+                        result = 'id:' + str(iid) +\
+                                 '\tnum_epochs: ' + str(num_epochs) + \
+                                 '\tstarter_learning_rate: ' + str(starter_learning_rate) + \
+                                 '\tlearning_rate_decay: ' + str(learning_rate_decay) + \
+                                 '\tnum_epochs: ' + str(num_epochs) + \
+                                 '\tminibatch_size: ' + str(minibatch_size) + \
+                                 '\tlambd: ' + str(lambd) + \
+                                 '\ttrain_accuracy: ' + str(train_accuracy) + \
+                                 '\ttest_accuracy: ' + str(test_accuracy) + \
+                                 '\tcost: ' + str(costs[-1])
+                        appendALine(result, path=resource_path + "train.txt")
+                        cost_str = 'id:' + str(iid) +\
+                                   '\tcosts: ' + str(costs)
+                        appendALine(cost_str, path=resource_path + "costs.txt")
+
+
+
+    # retrain(x, y)
     # X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
     # print(X_train_orig.shape)
     # print(Y_train_orig.shape)

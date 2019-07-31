@@ -114,12 +114,12 @@ def splitDataToTrainAndTest(x, y):
     y_train = shuffled_y[:, 0: m_train]
     x_test = shuffled_x[m_train: m, :, :, :]
     y_test = shuffled_y[:, m_train: m]
-    print(permutation[0:100])
+    # print(permutation[0:100])
     return x_train, y_train, x_test, y_test
 
 
-def model(X_train, Y_train, X_test, Y_test, learning_rate=0.003,
-          num_epochs=200, minibatch_size=128, lambd=None, print_cost=True):
+def model(X_train, Y_train, X_test, Y_test, starter_learning_rate=0.003,learning_rate_decay=1,
+          num_epochs=200, minibatch_size=128, lambd_train=0, print_cost=True):
     """
     Implements a three-layer ConvNet in Tensorflow:
     CONV2D -> RELU -> MAXPOOL -> CONV2D -> RELU -> MAXPOOL -> FLATTEN -> FULLYCONNECTED
@@ -149,7 +149,7 @@ def model(X_train, Y_train, X_test, Y_test, learning_rate=0.003,
 
     # Create Placeholders of the correct shape
     ### START CODE HERE ### (1 line)
-    X, Y = create_placeholders(n_H0, n_W0, n_C0, n_y)
+    X, Y, lambd = create_placeholders(n_H0, n_W0, n_C0, n_y)
     ### END CODE HERE ###
 
     # Initialize parameters
@@ -159,23 +159,23 @@ def model(X_train, Y_train, X_test, Y_test, learning_rate=0.003,
 
     # Forward propagation: Build the forward propagation in the tensorflow graph
     ### START CODE HERE ### (1 line)
-    Z3 = forward_propagation(X, parameters)
+    Z3 = forward_propagation(X, parameters, lambd)
     ### END CODE HERE ###
 
     # Cost function: Add cost function to tensorflow graph
     ### START CODE HERE ### (1 line)
-    if lambd is None:
-        cost = compute_cost(Z3, Y)
-    else:
-        cost = compute_cost(Z3, Y)
-        cost = compute_cost_reg(cost, parameters, lambd=lambd)
+    cost = compute_cost(Z3, Y)
     ### END CODE HERE ###
 
     # Backpropagation: Define the tensorflow optimizer. Use an AdamOptimizer that minimizes the cost.
     ### START CODE HERE ### (1 line)
-    optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
+    global_step = tf.Variable(0, trainable=False)
+    learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step,
+                                               1000, learning_rate_decay, staircase=True)
+    optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost, global_step=global_step)
     tf.add_to_collection("opt", optimizer)
     tf.add_to_collection("opt", cost)
+    tf.add_to_collection("opt", global_step)
     ### END CODE HERE ###
 
     # Initialize all the variables globally
@@ -189,7 +189,7 @@ def model(X_train, Y_train, X_test, Y_test, learning_rate=0.003,
 
         # Run the initialization
         sess.run(init)
-
+        step = 0
         # Do the training loop
         for epoch in range(num_epochs):
 
@@ -204,14 +204,15 @@ def model(X_train, Y_train, X_test, Y_test, learning_rate=0.003,
                 # IMPORTANT: The line that runs the graph on a minibatch.
                 # Run the session to execute the optimizer and the cost, the feedict should contain a minibatch for (X,Y).
                 ### START CODE HERE ### (1 line)
-                _, temp_cost = sess.run(tf.get_collection("opt"), feed_dict={X: minibatch_X, Y: minibatch_Y})
+                _, temp_cost, step = sess.run(tf.get_collection("opt"),
+                                        feed_dict={X: minibatch_X, Y: minibatch_Y, lambd: lambd_train})
                 ### END CODE HERE ###
 
                 minibatch_cost += temp_cost / num_minibatches
 
             # Print the cost every epoch
             if print_cost == True and epoch % 5 == 0:
-                print("Cost after epoch %i: %f" % (epoch, minibatch_cost))
+                print("LR:%f,Cost after epoch %i(step:%i)\t: %f" % (learning_rate.eval(), epoch, step, minibatch_cost))
             if print_cost == True and epoch % 1 == 0:
                 costs.append(minibatch_cost)
 
@@ -230,8 +231,8 @@ def model(X_train, Y_train, X_test, Y_test, learning_rate=0.003,
         # Calculate accuracy on the test set
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
         # print(accuracy)
-        train_accuracy = accuracy.eval({X: X_train, Y: Y_train})
-        test_accuracy = accuracy.eval({X: X_test, Y: Y_test})
+        train_accuracy = accuracy.eval({X: X_train, Y: Y_train, lambd: 0})
+        test_accuracy = accuracy.eval({X: X_test, Y: Y_test, lambd: 0})
         # print("Train Accuracy:", train_accuracy)
         # print("Test Accuracy:", test_accuracy)
 
@@ -265,8 +266,8 @@ def create_placeholders(n_H0, n_W0, n_C0, n_y):
     """
     X = tf.placeholder(name='X', shape=(None, n_H0, n_W0, n_C0), dtype=tf.float32)
     Y = tf.placeholder(name='Y', shape=(None, n_y), dtype=tf.float32)
-
-    return X, Y
+    lambd = tf.placeholder(name='lambd', dtype=tf.float32)
+    return X, Y, lambd
 
 
 def initialize_parameters():
@@ -282,16 +283,20 @@ def initialize_parameters():
 
     W1 = tf.get_variable(name='W1', dtype=tf.float32, shape=(4, 4, 3, 8),
                          initializer=tf.contrib.layers.xavier_initializer(seed=0))
+    bias1 = tf.get_variable('bias1', 8, initializer=tf.constant_initializer(0.0))
     W2 = tf.get_variable(name='W2', dtype=tf.float32, shape=(2, 2, 8, 16),
                          initializer=tf.contrib.layers.xavier_initializer(seed=0))
+    bias2 = tf.get_variable('bias2', 16, initializer=tf.constant_initializer(0.0))
 
     parameters = {"W1": W1,
-                  "W2": W2}
+                  "W2": W2,
+                  "bias1": bias1,
+                  "bias2": bias2}
 
     return parameters
 
 
-def forward_propagation(X, parameters):
+def forward_propagation(X, parameters, lambd_ph):
     """
     Implements the forward propagation for the model:
     CONV2D -> RELU -> MAXPOOL -> CONV2D -> RELU -> MAXPOOL -> FLATTEN -> FULLYCONNECTED
@@ -308,25 +313,33 @@ def forward_propagation(X, parameters):
     # Retrieve the parameters from the dictionary "parameters"
     W1 = parameters['W1']
     W2 = parameters['W2']
-
+    bias1 = parameters['bias1']
+    bias2 = parameters['bias2']
     ### START CODE HERE ###
+    # layer1
     # CONV2D: stride of 1, padding 'SAME'
     Z1 = tf.nn.conv2d(input=X, filter=W1, strides=(1, 1, 1, 1), padding='SAME')
     # RELU
-    A1 = tf.nn.relu(Z1)
+    A1 = tf.nn.relu(tf.nn.bias_add(Z1, bias1))
     # MAXPOOL: window 8x8, sride 8, padding 'SAME'
-    P1 = tf.nn.max_pool(value=A1, ksize=(1, 8, 8, 1), strides=(1, 8, 8, 1), padding='SAME')
+    P1 = tf.nn.max_pool(value=A1, ksize=(1, 4, 4, 1), strides=(1, 4, 4, 1), padding='SAME')
+
+    # layer2
     # CONV2D: filters W2, stride 1, padding 'SAME'
     Z2 = tf.nn.conv2d(input=P1, filter=W2, strides=(1, 1, 1, 1), padding='SAME')
     # RELU
-    A2 = tf.nn.relu(Z2)
+    A2 = tf.nn.relu(tf.nn.bias_add(Z2, bias2))
     # MAXPOOL: window 4x4, stride 4, padding 'SAME'
     P2 = tf.nn.max_pool(value=A2, ksize=(1, 4, 4, 1), strides=(1, 4, 4, 1), padding='SAME')
+
+    #layer3
     # FLATTEN
     P2 = tf.contrib.layers.flatten(inputs=P2)
     # FULLY-CONNECTED without non-linear activation function (not not call softmax).
     # 6 neurons in output layer. Hint: one of the arguments should be "activation_fn=None"
-    Z3 = tf.contrib.layers.fully_connected(P2, 6, activation_fn=None)
+    Z3 = tf.contrib.layers.fully_connected(P2, 6, activation_fn=None,
+                                           weights_regularizer=tf.contrib.layers.l2_regularizer(lambd_ph))
+
     ### END CODE HERE ###
 
     return Z3
@@ -347,24 +360,5 @@ def compute_cost(Z3, Y):
     ### START CODE HERE ### (1 line of code)
     cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=Z3, labels=Y), name='cost')
     ### END CODE HERE ###
-
-    return cost
-
-
-def compute_cost_reg(cost, parameters, lambd):
-    """
-    Computes the cost
-
-    Arguments:
-    :cost -- tensor cost without regularizer
-    :parameter -- dict contains W1 W2
-
-    Returns:
-    cost - Tensor of the cost function
-    """
-    W1 = parameters['W1']
-    W2 = parameters['W2']
-    cost = cost + tf.contrib.layers.l2_regularizer(lambd)(W1) \
-           + tf.contrib.layers.l2_regularizer(lambd)(W2)
 
     return cost
