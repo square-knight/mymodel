@@ -1,3 +1,9 @@
+import os
+import sys
+curPath = os.path.abspath(os.path.dirname(__file__))
+parentPath = os.path.split(curPath)[0]
+rootPath = os.path.split(parentPath)[0]
+sys.path.append(parentPath)
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -5,10 +11,13 @@ from app.cnn_utils import convert_to_one_hot, load_dataset
 from app.model import normalize, normalize1, model1, model, splitDataToTrainAndTest
 import tensorflow as tf
 from config.APP import model_path, images_path_train, resource_path
-import os
+from util.Model import getModelName
+# import os
 import logging
 from util.img_loader import appendALine
 logger = logging.getLogger(__name__)
+
+
 
 """
 # from app.model import *
@@ -54,7 +63,7 @@ def imgsToTrainSet(img_dir):
 
 # readImageFromDisk("/Users/doom/Documents/0b0ae651-4dd0-4590-afc9-a4077da14bc7cat1_2.jpeg")
 
-def train(x, y, starter_learning_rate,learning_rate_decay,num_epochs=200,minibatch_size=64,lambd=0):
+def train(x, y, starter_learning_rate,learning_rate_decay, dropout_rate,num_epochs=200,minibatch_size=64,lambd=0):
     # load dataset
     # X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
     X_train_orig, Y_train_orig, X_test_orig, Y_test_orig = splitDataToTrainAndTest(x, y)
@@ -84,13 +93,13 @@ def train(x, y, starter_learning_rate,learning_rate_decay,num_epochs=200,minibat
     # train
     train_accuracy, test_accuracy, parameters, costs = model(
         X_train, Y_train, X_test, Y_test,
-        starter_learning_rate=starter_learning_rate, learning_rate_decay=learning_rate_decay,
+        starter_learning_rate=starter_learning_rate, learning_rate_decay=learning_rate_decay, dropout_rate=dropout_rate,
         num_epochs=num_epochs, minibatch_size=minibatch_size, lambd_train=lambd)
     # save the model
 
     # print accuracy
-    print("Train Accuracy:", train_accuracy)
-    print("Test Accuracy:", test_accuracy)
+    logger.info("Train Accuracy: %f" % train_accuracy)
+    logger.info("Test Accuracy: %f" % test_accuracy)
     # plot the cost
     # plt.plot(np.squeeze(costs))
     # plt.ylabel('cost')
@@ -158,16 +167,10 @@ def predict(x, model_identifier=None):
         saver.restore(sess, tf.train.latest_checkpoint(model_path))
         graph = tf.get_default_graph()
         X = graph.get_tensor_by_name("X:0")
+        lambd = graph.get_tensor_by_name("lambd:0")
+        dropout = graph.get_tensor_by_name("dropout:0")
         predict_op = graph.get_tensor_by_name("predict_op:0")
-
-        return predict_op.eval({X: x})
-
-
-def getModelName(model_identifier=None):
-    model_name = 'finger-model'
-    if model_identifier is not None:
-        model_name = model_name + '-' + model_identifier
-    return model_name
+        return predict_op.eval({X: x, lambd: 0, dropout: 0})
 
 
 # train()
@@ -213,7 +216,9 @@ if __name__ == '__main__':
     #                      initializer=tf.contrib.layers.xavier_initializer(seed=0))
     # Z1 = tf.nn.conv2d(input=X, filter=W1, strides=(1, 1, 1, 1), padding='SAME')
     # P1 = tf.nn.max_pool(value=Z1, ksize=(1, 8, 8, 1), strides=(1, 8, 8, 1), padding='SAME')
+
     # with tf.Session() as sess:
+
     #
     #     # Run the initialization
     #     sess.run(tf.global_variables_initializer())
@@ -223,39 +228,41 @@ if __name__ == '__main__':
 
     x, y = imgsToTrainSet(images_path_train)
 
-    num_epochss = [200, 300]
-    starter_learning_rates = [0.006,0.003]
-    learning_rate_decays = [0.99,0.96,0.9]
-    minibatch_sizes = [64,128]
-    lambds = [0,1,100]
-
-    iid = 0
+    num_epochss = [3000]
+    starter_learning_rates = [0.007]
+    learning_rate_decays = [0.99]
+    minibatch_sizes = [64]
+    lambds = [0]
+    dropout_rates=[0.1, 0.3]
+    iid = 106
     for num_epochs in num_epochss:
         for starter_learning_rate in starter_learning_rates:
             for learning_rate_decay in learning_rate_decays:
                 for minibatch_size in minibatch_sizes:
                     for lambd in lambds:
-                        iid = iid + 1
-                        train_accuracy, test_accuracy, costs = train(x, y,
-                                                                     starter_learning_rate,
-                                                                     learning_rate_decay,
-                                                                     num_epochs,
-                                                                     minibatch_size,
-                                                                     lambd)
-                        result = 'id:' + str(iid) +\
-                                 '\tnum_epochs: ' + str(num_epochs) + \
-                                 '\tstarter_learning_rate: ' + str(starter_learning_rate) + \
-                                 '\tlearning_rate_decay: ' + str(learning_rate_decay) + \
-                                 '\tnum_epochs: ' + str(num_epochs) + \
-                                 '\tminibatch_size: ' + str(minibatch_size) + \
-                                 '\tlambd: ' + str(lambd) + \
-                                 '\ttrain_accuracy: ' + str(train_accuracy) + \
-                                 '\ttest_accuracy: ' + str(test_accuracy) + \
-                                 '\tcost: ' + str(costs[-1])
-                        appendALine(result, path=resource_path + "train.txt")
-                        cost_str = 'id:' + str(iid) +\
-                                   '\tcosts: ' + str(costs)
-                        appendALine(cost_str, path=resource_path + "costs.txt")
+                        for dropout_rate in dropout_rates:
+                            iid = iid + 1
+                            train_accuracy, test_accuracy, costs = train(x, y,
+                                                                         starter_learning_rate=starter_learning_rate,
+                                                                         learning_rate_decay=learning_rate_decay,
+                                                                         dropout_rate=dropout_rate,
+                                                                         num_epochs=num_epochs,
+                                                                         minibatch_size=minibatch_size,
+                                                                         lambd=lambd)
+                            result = 'id:' + str(iid) +\
+                                     '\tnum_epochs: ' + str(num_epochs) + \
+                                     '\tstarter_learning_rate: ' + str(starter_learning_rate) + \
+                                     '\tlearning_rate_decay: ' + str(learning_rate_decay) + \
+                                     '\tminibatch_size: ' + str(minibatch_size) + \
+                                     '\tlambd: ' + str(lambd) + \
+                                     '\tdropout_rate: ' + str(dropout_rate) + \
+                                     '\ttrain_accuracy: ' + str(train_accuracy) + \
+                                     '\ttest_accuracy: ' + str(test_accuracy) + \
+                                     '\tcost: ' + str(costs[-1])
+                            appendALine(result, path=resource_path + "train.txt")
+                            cost_str = 'id:' + str(iid) +\
+                                       '\tcosts: ' + str(costs)
+                            appendALine(cost_str, path=resource_path + "costs.txt")
 
 
 

@@ -3,7 +3,8 @@ import tensorflow as tf
 from app.cnn_utils import random_mini_batches
 from config.APP import model_path
 import numpy as np
-
+import logging
+logger = logging.getLogger(__name__)
 
 def model1(X_train, Y_train, X_test, Y_test, session, model_name,
            learning_rate=0.003,
@@ -118,7 +119,7 @@ def splitDataToTrainAndTest(x, y):
     return x_train, y_train, x_test, y_test
 
 
-def model(X_train, Y_train, X_test, Y_test, starter_learning_rate=0.003,learning_rate_decay=1,
+def model(X_train, Y_train, X_test, Y_test, starter_learning_rate=0.003,learning_rate_decay=1,dropout_rate=0,
           num_epochs=200, minibatch_size=128, lambd_train=0, print_cost=True):
     """
     Implements a three-layer ConvNet in Tensorflow:
@@ -149,7 +150,7 @@ def model(X_train, Y_train, X_test, Y_test, starter_learning_rate=0.003,learning
 
     # Create Placeholders of the correct shape
     ### START CODE HERE ### (1 line)
-    X, Y, lambd = create_placeholders(n_H0, n_W0, n_C0, n_y)
+    X, Y, lambd, dropout = create_placeholders(n_H0, n_W0, n_C0, n_y)
     ### END CODE HERE ###
 
     # Initialize parameters
@@ -159,7 +160,7 @@ def model(X_train, Y_train, X_test, Y_test, starter_learning_rate=0.003,learning
 
     # Forward propagation: Build the forward propagation in the tensorflow graph
     ### START CODE HERE ### (1 line)
-    Z3 = forward_propagation(X, parameters, lambd)
+    Z3 = forward_propagation(X, parameters, lambd, dropout)
     ### END CODE HERE ###
 
     # Cost function: Add cost function to tensorflow graph
@@ -171,7 +172,7 @@ def model(X_train, Y_train, X_test, Y_test, starter_learning_rate=0.003,learning
     ### START CODE HERE ### (1 line)
     global_step = tf.Variable(0, trainable=False)
     learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step,
-                                               1000, learning_rate_decay, staircase=True)
+                                               10000, learning_rate_decay, staircase=True)
     optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost, global_step=global_step)
     tf.add_to_collection("opt", optimizer)
     tf.add_to_collection("opt", cost)
@@ -205,14 +206,15 @@ def model(X_train, Y_train, X_test, Y_test, starter_learning_rate=0.003,learning
                 # Run the session to execute the optimizer and the cost, the feedict should contain a minibatch for (X,Y).
                 ### START CODE HERE ### (1 line)
                 _, temp_cost, step = sess.run(tf.get_collection("opt"),
-                                        feed_dict={X: minibatch_X, Y: minibatch_Y, lambd: lambd_train})
+                                              feed_dict={X: minibatch_X, Y: minibatch_Y,
+                                                         lambd: lambd_train, dropout: dropout_rate})
                 ### END CODE HERE ###
 
                 minibatch_cost += temp_cost / num_minibatches
 
             # Print the cost every epoch
             if print_cost == True and epoch % 5 == 0:
-                print("LR:%f,Cost after epoch %i(step:%i)\t: %f" % (learning_rate.eval(), epoch, step, minibatch_cost))
+                logger.info("LR:%f,Cost after epoch %i(step:%i)\t: %f" % (learning_rate.eval(), epoch, step, minibatch_cost))
             if print_cost == True and epoch % 1 == 0:
                 costs.append(minibatch_cost)
 
@@ -231,8 +233,8 @@ def model(X_train, Y_train, X_test, Y_test, starter_learning_rate=0.003,learning
         # Calculate accuracy on the test set
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
         # print(accuracy)
-        train_accuracy = accuracy.eval({X: X_train, Y: Y_train, lambd: 0})
-        test_accuracy = accuracy.eval({X: X_test, Y: Y_test, lambd: 0})
+        train_accuracy = accuracy.eval({X: X_train, Y: Y_train, lambd: 0, dropout: 0})
+        test_accuracy = accuracy.eval({X: X_test, Y: Y_test, lambd: 0, dropout: 0})
         # print("Train Accuracy:", train_accuracy)
         # print("Test Accuracy:", test_accuracy)
 
@@ -267,7 +269,8 @@ def create_placeholders(n_H0, n_W0, n_C0, n_y):
     X = tf.placeholder(name='X', shape=(None, n_H0, n_W0, n_C0), dtype=tf.float32)
     Y = tf.placeholder(name='Y', shape=(None, n_y), dtype=tf.float32)
     lambd = tf.placeholder(name='lambd', dtype=tf.float32)
-    return X, Y, lambd
+    dropout = tf.placeholder(name='dropout', dtype=tf.float32)
+    return X, Y, lambd, dropout
 
 
 def initialize_parameters():
@@ -296,7 +299,7 @@ def initialize_parameters():
     return parameters
 
 
-def forward_propagation(X, parameters, lambd_ph):
+def forward_propagation(X, parameters, lambd_ph, dropout):
     """
     Implements the forward propagation for the model:
     CONV2D -> RELU -> MAXPOOL -> CONV2D -> RELU -> MAXPOOL -> FLATTEN -> FULLYCONNECTED
@@ -335,11 +338,11 @@ def forward_propagation(X, parameters, lambd_ph):
     #layer3
     # FLATTEN
     P2 = tf.contrib.layers.flatten(inputs=P2)
+    P2_dropout = tf.nn.dropout(P2, rate=dropout)
     # FULLY-CONNECTED without non-linear activation function (not not call softmax).
     # 6 neurons in output layer. Hint: one of the arguments should be "activation_fn=None"
-    Z3 = tf.contrib.layers.fully_connected(P2, 6, activation_fn=None,
+    Z3 = tf.contrib.layers.fully_connected(P2_dropout, 6, activation_fn=None,
                                            weights_regularizer=tf.contrib.layers.l2_regularizer(lambd_ph))
-
     ### END CODE HERE ###
 
     return Z3
