@@ -17,7 +17,7 @@ from PIL import Image
 from app.main import predict
 from app.main import readImageFromDisk
 
-from config.APP import images_path, images_path_train
+from config.APP import images_path, images_path_train, images_path_test
 from util.filename import gen_image_filename
 
 from app.myblueprint import web

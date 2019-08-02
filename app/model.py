@@ -110,7 +110,7 @@ def splitDataToTrainAndTest(x, y):
     shuffled_x = x[permutation, :, :, :]
     shuffled_y = y[:, permutation]
 
-    m_train = int(m * 0.8)
+    m_train = int(m * 0.9)
     x_train = shuffled_x[0: m_train, :, :, :]
     y_train = shuffled_y[:, 0: m_train]
     x_test = shuffled_x[m_train: m, :, :, :]
@@ -207,7 +207,7 @@ def model(X_train, Y_train, X_test, Y_test, starter_learning_rate=0.003,learning
                 ### START CODE HERE ### (1 line)
                 _, temp_cost, step = sess.run(tf.get_collection("opt"),
                                               feed_dict={X: minibatch_X, Y: minibatch_Y,
-                                                         lambd: lambd_train, dropout: dropout_rate})
+                                                         lambd: lambd_train})#, dropout: dropout_rate
                 ### END CODE HERE ###
 
                 minibatch_cost += temp_cost / num_minibatches
@@ -233,8 +233,8 @@ def model(X_train, Y_train, X_test, Y_test, starter_learning_rate=0.003,learning
         # Calculate accuracy on the test set
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
         # print(accuracy)
-        train_accuracy = accuracy.eval({X: X_train, Y: Y_train, lambd: 0, dropout: 0})
-        test_accuracy = accuracy.eval({X: X_test, Y: Y_test, lambd: 0, dropout: 0})
+        train_accuracy = accuracy.eval({X: X_train, Y: Y_train, lambd: 0})#, dropout: 0
+        test_accuracy = accuracy.eval({X: X_test, Y: Y_test, lambd: 0})#, dropout: 0
         # print("Train Accuracy:", train_accuracy)
         # print("Test Accuracy:", test_accuracy)
 
@@ -284,12 +284,12 @@ def initialize_parameters():
 
     tf.set_random_seed(1)  # so that your "random" numbers match ours
 
-    W1 = tf.get_variable(name='W1', dtype=tf.float32, shape=(4, 4, 3, 8),
+    W1 = tf.get_variable(name='W1', dtype=tf.float32, shape=(4, 4, 3, 16),
                          initializer=tf.contrib.layers.xavier_initializer(seed=0))
-    bias1 = tf.get_variable('bias1', 8, initializer=tf.constant_initializer(0.0))
-    W2 = tf.get_variable(name='W2', dtype=tf.float32, shape=(2, 2, 8, 16),
+    bias1 = tf.get_variable('bias1', 16, initializer=tf.constant_initializer(0.0))
+    W2 = tf.get_variable(name='W2', dtype=tf.float32, shape=(2, 2, 16, 32),
                          initializer=tf.contrib.layers.xavier_initializer(seed=0))
-    bias2 = tf.get_variable('bias2', 16, initializer=tf.constant_initializer(0.0))
+    bias2 = tf.get_variable('bias2', 32, initializer=tf.constant_initializer(0.0))
 
     parameters = {"W1": W1,
                   "W2": W2,
@@ -338,11 +338,14 @@ def forward_propagation(X, parameters, lambd_ph, dropout):
     #layer3
     # FLATTEN
     P2 = tf.contrib.layers.flatten(inputs=P2)
-    P2_dropout = tf.nn.dropout(P2, rate=dropout)
+    # print(P2)
+    # P2_dropout = tf.nn.dropout(P2, rate=dropout)
     # FULLY-CONNECTED without non-linear activation function (not not call softmax).
     # 6 neurons in output layer. Hint: one of the arguments should be "activation_fn=None"
-    Z3 = tf.contrib.layers.fully_connected(P2_dropout, 6, activation_fn=None,
-                                           weights_regularizer=tf.contrib.layers.l2_regularizer(lambd_ph))
+    # Z3 = tf.contrib.layers.fully_connected(P2_dropout, 6, activation_fn=None,
+    #                                        weights_regularizer=tf.contrib.layers.l2_regularizer(lambd_ph))
+    # A21 = tf.contrib.layers.fully_connected(P2, 6)
+    Z3 = tf.contrib.layers.fully_connected(P2, 6, activation_fn=None)
     ### END CODE HERE ###
 
     return Z3

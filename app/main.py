@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from app.cnn_utils import convert_to_one_hot, load_dataset
 from app.model import normalize, normalize1, model1, model, splitDataToTrainAndTest
 import tensorflow as tf
-from config.APP import model_path, images_path_train, resource_path
+from config.APP import model_path, images_path_train, resource_path, images_path_test
 from util.Model import getModelName
 # import os
 import logging
@@ -44,7 +44,7 @@ def readImageFromDisk(path):
     return image
 
 
-def imgsToTrainSet(img_dir):
+def imgsToDataSet(img_dir):
     x = []
     y = []
     if os.path.isdir(img_dir):
@@ -63,10 +63,12 @@ def imgsToTrainSet(img_dir):
 
 # readImageFromDisk("/Users/doom/Documents/0b0ae651-4dd0-4590-afc9-a4077da14bc7cat1_2.jpeg")
 
-def train(x, y, starter_learning_rate,learning_rate_decay, dropout_rate,num_epochs=200,minibatch_size=64,lambd=0):
+def train(starter_learning_rate, learning_rate_decay, dropout_rate,num_epochs=200, minibatch_size=64, lambd=0):
     # load dataset
     # X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
-    X_train_orig, Y_train_orig, X_test_orig, Y_test_orig = splitDataToTrainAndTest(x, y)
+    # X_train_orig, Y_train_orig, X_test_orig, Y_test_orig = splitDataToTrainAndTest(x, y)
+    X_train_orig, Y_train_orig = imgsToDataSet(images_path_train)
+    X_test_orig, Y_test_orig = imgsToDataSet(images_path_test)
     # normalize x
     X_train, X_test = normalize(X_train_orig, X_test_orig)
 
@@ -226,15 +228,15 @@ if __name__ == '__main__':
     #     print(z.shape)
     #     print(sess.run(z, feed_dict={lambd: 1}))
 
-    x, y = imgsToTrainSet(images_path_train)
+    # x, y = imgsToDataSet(images_path_train)
 
-    num_epochss = [3000]
-    starter_learning_rates = [0.007]
-    learning_rate_decays = [0.99]
+    num_epochss = [300]
+    starter_learning_rates = [0.006]
+    learning_rate_decays = [0.8]
     minibatch_sizes = [64]
     lambds = [0]
-    dropout_rates=[0.1, 0.3]
-    iid = 106
+    dropout_rates = [0]
+    iid = 124
     for num_epochs in num_epochss:
         for starter_learning_rate in starter_learning_rates:
             for learning_rate_decay in learning_rate_decays:
@@ -242,8 +244,7 @@ if __name__ == '__main__':
                     for lambd in lambds:
                         for dropout_rate in dropout_rates:
                             iid = iid + 1
-                            train_accuracy, test_accuracy, costs = train(x, y,
-                                                                         starter_learning_rate=starter_learning_rate,
+                            train_accuracy, test_accuracy, costs = train(starter_learning_rate=starter_learning_rate,
                                                                          learning_rate_decay=learning_rate_decay,
                                                                          dropout_rate=dropout_rate,
                                                                          num_epochs=num_epochs,
