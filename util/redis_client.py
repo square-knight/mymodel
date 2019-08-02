@@ -52,13 +52,16 @@ class IdGenerator:
 generator = IdGenerator('mymodel:images:id', redis_client)
 generator.init(1000)
 
+trainIdGenerator = IdGenerator('mymodel:train:id', redis_client)
+# trainIdGenerator.init(126)
+
 if __name__ == '__main__1111':
     generator = IdGenerator('test', redis_client)
-
-    generator.init(100)
-
+    generator1 = IdGenerator('test1', redis_client)
+    # generator.init(100)
+    # generator1.init(1)
     print(generator.gen_id())
+    print(generator1.gen_id())
     print(generator.gen_id())
-    print(generator.gen_id())
-    print(generator.gen_id())
+    print(trainIdGenerator.gen_id())
     pass

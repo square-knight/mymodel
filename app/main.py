@@ -13,6 +13,7 @@ import tensorflow as tf
 from config.APP import model_path, images_path_train, resource_path, images_path_test
 from util.Model import getModelName
 # import os
+from util.redis_client import trainIdGenerator
 import logging
 from util.img_loader import appendALine
 logger = logging.getLogger(__name__)
@@ -61,55 +62,27 @@ def imgsToDataSet(img_dir):
     return x, y
 
 
-# readImageFromDisk("/Users/doom/Documents/0b0ae651-4dd0-4590-afc9-a4077da14bc7cat1_2.jpeg")
+def predict(x, model_identifier=None):
+    """
+    predit number of fingers in the picture
 
-def train(starter_learning_rate, learning_rate_decay, dropout_rate,num_epochs=200, minibatch_size=64, lambd=0):
-    # load dataset
-    # X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
-    # X_train_orig, Y_train_orig, X_test_orig, Y_test_orig = splitDataToTrainAndTest(x, y)
-    X_train_orig, Y_train_orig = imgsToDataSet(images_path_train)
-    X_test_orig, Y_test_orig = imgsToDataSet(images_path_test)
-    # normalize x
-    X_train, X_test = normalize(X_train_orig, X_test_orig)
+    Arguments:
+    x -- predict input, of shape(None, 64, 64, 3)
+    :return:
+    y -- predict result
+    """
 
-    # convert y to one hot
-    Y_train = convert_to_one_hot(Y_train_orig, 6).T
-    Y_test = convert_to_one_hot(Y_test_orig, 6).T
-
-    # hyperparameters
-    # starter_learning_rate = 0.003
-    # learning_rate_decay = 0.96
-    # num_epochs = 150
-    # minibatch_size = 64
-    # lambd = 50.
-    # 1-0.95-0.74 cost:0.19
-    # 10-0.96-0.78 cost:0.13
-    # 0.1-0.19-0.23
-    # 0.03-0.14-0.14
-    # 0.01-0.14-0.15 cost:0.12
-    # 0.003-0.978-0.875
-    # 0.001-0.98-0.9
-    # 1e-4-0.15-0.16 cost:0.14
-    # 1e-8-0.14-0.15 cost:0.11
-    # none-0.98-0.89
-    # train
-    train_accuracy, test_accuracy, parameters, costs = model(
-        X_train, Y_train, X_test, Y_test,
-        starter_learning_rate=starter_learning_rate, learning_rate_decay=learning_rate_decay, dropout_rate=dropout_rate,
-        num_epochs=num_epochs, minibatch_size=minibatch_size, lambd_train=lambd)
-    # save the model
-
-    # print accuracy
-    logger.info("Train Accuracy: %f" % train_accuracy)
-    logger.info("Test Accuracy: %f" % test_accuracy)
-    # plot the cost
-    # plt.plot(np.squeeze(costs))
-    # plt.ylabel('cost')
-    # plt.xlabel('iterations (per tens)')
-    # plt.title("Learning rate =" + str(starter_learning_rate))
-    # plt.show()
-    return train_accuracy, test_accuracy, np.squeeze(costs)
-
+    x = normalize1(x)
+    with tf.Session() as sess:
+        model_name = getModelName(model_identifier)
+        saver = tf.train.import_meta_graph(model_path + model_name + '.meta')
+        saver.restore(sess, tf.train.latest_checkpoint(model_path))
+        graph = tf.get_default_graph()
+        X = graph.get_tensor_by_name("X:0")
+        lambd = graph.get_tensor_by_name("lambd:0")
+        dropout = graph.get_tensor_by_name("dropout:0")
+        predict_op = graph.get_tensor_by_name("predict_op:0")
+        return predict_op.eval({X: x, lambd: 0, dropout: 0})
 
 def retrain(x, y, model_identifier=None):
     # x = normalize1(x_orig)
@@ -152,48 +125,39 @@ def retrain(x, y, model_identifier=None):
     plt.show()
 
 
-def predict(x, model_identifier=None):
-    """
-    predit number of fingers in the picture
+def train(starter_learning_rate, learning_rate_decay, dropout_rate,num_epochs=200, minibatch_size=64, lambd=0):
+    # load dataset
+    # X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
+    X_train_orig, Y_train_orig = imgsToDataSet(images_path_train)
+    m_train = Y_train_orig.shape[1]
+    print(m_train)
+    X_test_orig, Y_test_orig = imgsToDataSet(images_path_test)
+    m_test = Y_test_orig.shape[1]
+    print(m_test)
+    # normalize x
+    X_train, X_test = normalize(X_train_orig, X_test_orig)
 
-    Arguments:
-    x -- predict input, of shape(None, 64, 64, 3)
-    :return:
-    y -- predict result
-    """
+    # convert y to one hot
+    Y_train = convert_to_one_hot(Y_train_orig, 6).T
+    Y_test = convert_to_one_hot(Y_test_orig, 6).T
 
-    x = normalize1(x)
-    with tf.Session() as sess:
-        model_name = getModelName(model_identifier)
-        saver = tf.train.import_meta_graph(model_path + model_name + '.meta')
-        saver.restore(sess, tf.train.latest_checkpoint(model_path))
-        graph = tf.get_default_graph()
-        X = graph.get_tensor_by_name("X:0")
-        lambd = graph.get_tensor_by_name("lambd:0")
-        dropout = graph.get_tensor_by_name("dropout:0")
-        predict_op = graph.get_tensor_by_name("predict_op:0")
-        return predict_op.eval({X: x, lambd: 0, dropout: 0})
+    # train
+    train_accuracy, test_accuracy, parameters, costs = model(
+        X_train, Y_train, X_test, Y_test,
+        starter_learning_rate=starter_learning_rate, learning_rate_decay=learning_rate_decay, dropout_rate=dropout_rate,
+        num_epochs=num_epochs, minibatch_size=minibatch_size, lambd_train=lambd)
+    # save the model
 
-
-# train()
-# X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
-# X_train, X_test = normalize(X_train_orig,X_test_orig)
-#
-# img1 = readImageFromDisk("/Users/doom/Documents/d5c94724-78ce-4b63-bab2-304ee3323c4dcat1_2.jpeg")
-# img2 = readImageFromDisk("/Users/doom/Documents/c171ca3b-978e-4888-ae88-28507c97996ecat1_2.jpeg")
-# img = np.reshape(img2, (1, 64, 64, 3))
-# plt.figure()
-# plt.subplot(2,2,1)
-# plt.imshow(X_test_orig[3])
-# plt.subplot(2,2,2)
-# plt.imshow(X_test_orig[4])
-# plt.subplot(2,2,3)
-# plt.imshow(img1)
-# plt.subplot(2,2,4)
-# plt.imshow(img2)
-# plt.show()
-# y_predict = predict(X_test)
-# print("y_predict:\n", y_predict)
+    # print accuracy
+    logger.info("Train Accuracy: %f" % train_accuracy)
+    logger.info("Test Accuracy: %f" % test_accuracy)
+    # plot the cost
+    # plt.plot(np.squeeze(costs))
+    # plt.ylabel('cost')
+    # plt.xlabel('iterations (per tens)')
+    # plt.title("Learning rate =" + str(starter_learning_rate))
+    # plt.show()
+    return train_accuracy, test_accuracy, np.squeeze(costs), m_train, m_test
 
 
 def test():
@@ -228,28 +192,29 @@ if __name__ == '__main__':
     #     print(z.shape)
     #     print(sess.run(z, feed_dict={lambd: 1}))
 
-    # x, y = imgsToDataSet(images_path_train)
-
+    # _, y = imgsToDataSet(images_path_train)
+    # print(m)
     num_epochss = [300]
     starter_learning_rates = [0.006]
     learning_rate_decays = [0.8]
     minibatch_sizes = [64]
     lambds = [0]
     dropout_rates = [0]
-    iid = 124
     for num_epochs in num_epochss:
         for starter_learning_rate in starter_learning_rates:
             for learning_rate_decay in learning_rate_decays:
                 for minibatch_size in minibatch_sizes:
                     for lambd in lambds:
                         for dropout_rate in dropout_rates:
-                            iid = iid + 1
-                            train_accuracy, test_accuracy, costs = train(starter_learning_rate=starter_learning_rate,
-                                                                         learning_rate_decay=learning_rate_decay,
-                                                                         dropout_rate=dropout_rate,
-                                                                         num_epochs=num_epochs,
-                                                                         minibatch_size=minibatch_size,
-                                                                         lambd=lambd)
+                            iid = trainIdGenerator.gen_id()
+                            train_accuracy, test_accuracy, costs, m_train, m_test = train(
+                                starter_learning_rate=starter_learning_rate,
+                                learning_rate_decay=learning_rate_decay,
+                                dropout_rate=dropout_rate,
+                                num_epochs=num_epochs,
+                                minibatch_size=minibatch_size,
+                                lambd=lambd
+                            )
                             result = 'id:' + str(iid) +\
                                      '\tnum_epochs: ' + str(num_epochs) + \
                                      '\tstarter_learning_rate: ' + str(starter_learning_rate) + \
@@ -259,7 +224,9 @@ if __name__ == '__main__':
                                      '\tdropout_rate: ' + str(dropout_rate) + \
                                      '\ttrain_accuracy: ' + str(train_accuracy) + \
                                      '\ttest_accuracy: ' + str(test_accuracy) + \
-                                     '\tcost: ' + str(costs[-1])
+                                     '\tcost: ' + str(costs[-1]) + \
+                                     '\tm_train: ' + str(m_train) + \
+                                     '\tm_test: ' + str(m_test)
                             appendALine(result, path=resource_path + "train.txt")
                             cost_str = 'id:' + str(iid) +\
                                        '\tcosts: ' + str(costs)
