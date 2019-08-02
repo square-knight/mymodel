@@ -130,10 +130,8 @@ def train(starter_learning_rate, learning_rate_decay, dropout_rate,num_epochs=20
     # X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
     X_train_orig, Y_train_orig = imgsToDataSet(images_path_train)
     m_train = Y_train_orig.shape[1]
-    print(m_train)
     X_test_orig, Y_test_orig = imgsToDataSet(images_path_test)
     m_test = Y_test_orig.shape[1]
-    print(m_test)
     # normalize x
     X_train, X_test = normalize(X_train_orig, X_test_orig)
 
@@ -194,7 +192,7 @@ if __name__ == '__main__':
 
     # _, y = imgsToDataSet(images_path_train)
     # print(m)
-    num_epochss = [300]
+    num_epochss = [200]
     starter_learning_rates = [0.006]
     learning_rate_decays = [0.8]
     minibatch_sizes = [64]
