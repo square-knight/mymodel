@@ -172,7 +172,7 @@ def model(X_train, Y_train, X_test, Y_test, starter_learning_rate=0.003,learning
     ### START CODE HERE ### (1 line)
     global_step = tf.Variable(0, trainable=False)
     learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step,
-                                               10000, learning_rate_decay, staircase=True)
+                                               50000, learning_rate_decay, staircase=True)
     optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost, global_step=global_step)
     tf.add_to_collection("opt", optimizer)
     tf.add_to_collection("opt", cost)
@@ -344,8 +344,8 @@ def forward_propagation(X, parameters, lambd_ph, dropout):
     # 6 neurons in output layer. Hint: one of the arguments should be "activation_fn=None"
     # Z3 = tf.contrib.layers.fully_connected(P2_dropout, 6, activation_fn=None,
     #                                        weights_regularizer=tf.contrib.layers.l2_regularizer(lambd_ph))
-    # A21 = tf.contrib.layers.fully_connected(P2, 6)
-    Z3 = tf.contrib.layers.fully_connected(P2, 6, activation_fn=None)
+    A21 = tf.contrib.layers.fully_connected(P2, 12)
+    Z3 = tf.contrib.layers.fully_connected(A21, 6, activation_fn=None)
     ### END CODE HERE ###
 
     return Z3

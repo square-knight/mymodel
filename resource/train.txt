@@ -1,0 +1,152 @@
+id:1	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 64	lambd: 1	train_accuracy: 0.39314988	test_accuracy: 0.36842105	cost: 1.4391252837091122
+id:2	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 64	lambd: 10	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5746845006942745
+id:3	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 64	lambd: 30	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5746845006942745
+id:4	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 64	lambd: 50	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5746845006942745
+id:5	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 64	lambd: 100	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5746845006942745
+id:6	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 128	lambd: 1	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5712918914281406
+id:7	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 128	lambd: 10	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5712918914281406
+id:8	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 128	lambd: 30	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5712918914281406
+id:9	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 128	lambd: 50	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5712918914281406
+id:10	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 128	lambd: 100	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5712918914281406
+id:11	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 64	lambd: 1	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5732544458137365
+id:12	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 64	lambd: 10	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5732544458137365
+id:13	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 64	lambd: 30	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5732544458137365
+id:14	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 64	lambd: 50	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5732544458137365
+id:15	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 64	lambd: 100	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5732544458137365
+id:16	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 128	lambd: 1	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5709290550305293
+id:17	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 128	lambd: 10	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5709290550305293
+id:18	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 128	lambd: 30	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5709290550305293
+id:19	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 128	lambd: 50	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5709290550305293
+id:20	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 128	lambd: 100	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5709290550305293
+id:21	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 64	lambd: 1	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5709434117911003
+id:22	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 64	lambd: 10	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5709434117911003
+id:23	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 64	lambd: 30	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5709434117911003
+id:24	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 64	lambd: 50	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5709434117911003
+id:25	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 64	lambd: 100	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5709434117911003
+id:26	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 128	lambd: 1	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.570295466826512
+id:27	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 128	lambd: 10	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.570295466826512
+id:28	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 128	lambd: 30	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.570295466826512
+id:29	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 128	lambd: 50	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.570295466826512
+id:30	num_epochs: 150	starter_learning_rate: 0.1	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 128	lambd: 100	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.570295466826512
+id:31	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 64	lambd: 1	train_accuracy: 0.6334895	test_accuracy: 0.5602339	cost: 0.9769020800320609
+id:32	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 64	lambd: 10	train_accuracy: 0.6334895	test_accuracy: 0.5602339	cost: 0.9769020800320609
+id:33	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 64	lambd: 30	train_accuracy: 0.6334895	test_accuracy: 0.5602339	cost: 0.9769020800320609
+id:34	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 64	lambd: 50	train_accuracy: 0.6334895	test_accuracy: 0.5602339	cost: 0.9769020800320609
+id:35	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 64	lambd: 100	train_accuracy: 0.6334895	test_accuracy: 0.5602339	cost: 0.9769020800320609
+id:36	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 128	lambd: 1	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5692596252147968
+id:37	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 128	lambd: 10	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5692596252147968
+id:38	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 128	lambd: 30	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5692596252147968
+id:39	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 128	lambd: 50	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5692596252147968
+id:40	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 128	lambd: 100	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5692596252147968
+id:41	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 64	lambd: 1	train_accuracy: 0.6387588	test_accuracy: 0.58128655	cost: 0.9540404137575403
+id:42	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 64	lambd: 10	train_accuracy: 0.6387588	test_accuracy: 0.58128655	cost: 0.9540404137575403
+id:43	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 64	lambd: 30	train_accuracy: 0.6387588	test_accuracy: 0.58128655	cost: 0.9540404137575403
+id:44	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 64	lambd: 50	train_accuracy: 0.6387588	test_accuracy: 0.58128655	cost: 0.9540404137575403
+id:45	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 64	lambd: 100	train_accuracy: 0.6387588	test_accuracy: 0.58128655	cost: 0.9540404137575403
+id:46	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 128	lambd: 1	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5691942022396967
+id:47	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 128	lambd: 10	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5691942022396967
+id:48	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 128	lambd: 30	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5691942022396967
+id:49	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 128	lambd: 50	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5691942022396967
+id:50	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 128	lambd: 100	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5691942022396967
+id:51	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 64	lambd: 1	train_accuracy: 0.6413934	test_accuracy: 0.6023392	cost: 0.9194155863995824
+id:52	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 64	lambd: 10	train_accuracy: 0.6413934	test_accuracy: 0.6023392	cost: 0.9194155863995824
+id:53	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 64	lambd: 30	train_accuracy: 0.6413934	test_accuracy: 0.6023392	cost: 0.9194155863995824
+id:54	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 64	lambd: 50	train_accuracy: 0.6413934	test_accuracy: 0.6023392	cost: 0.9194155863995824
+id:55	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 64	lambd: 100	train_accuracy: 0.6413934	test_accuracy: 0.6023392	cost: 0.9194155863995824
+id:56	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 128	lambd: 1	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5690646630067098
+id:57	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 128	lambd: 10	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5690646630067098
+id:58	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 128	lambd: 30	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5690646630067098
+id:59	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 128	lambd: 50	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5690646630067098
+id:60	num_epochs: 150	starter_learning_rate: 0.03	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 128	lambd: 100	train_accuracy: 0.32259953	test_accuracy: 0.28421053	cost: 1.5690646630067098
+id:61	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 64	lambd: 1	train_accuracy: 0.9677986	test_accuracy: 0.80350876	cost: 0.13012181890179528
+id:62	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 64	lambd: 10	train_accuracy: 0.9677986	test_accuracy: 0.80350876	cost: 0.13012181890179528
+id:63	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 64	lambd: 30	train_accuracy: 0.9677986	test_accuracy: 0.80350876	cost: 0.13012181890179528
+id:64	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 64	lambd: 50	train_accuracy: 0.9677986	test_accuracy: 0.80350876	cost: 0.13012181890179528
+id:65	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 64	lambd: 100	train_accuracy: 0.9677986	test_accuracy: 0.80350876	cost: 0.13012181890179528
+id:66	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 128	lambd: 1	train_accuracy: 0.9306206	test_accuracy: 0.7906433	cost: 0.2017083001824526
+id:67	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 128	lambd: 10	train_accuracy: 0.9306206	test_accuracy: 0.7906433	cost: 0.2017083001824526
+id:68	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 128	lambd: 30	train_accuracy: 0.9306206	test_accuracy: 0.7906433	cost: 0.2017083001824526
+id:69	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 128	lambd: 50	train_accuracy: 0.9306206	test_accuracy: 0.7906433	cost: 0.2017083001824526
+id:70	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 128	lambd: 100	train_accuracy: 0.9306206	test_accuracy: 0.7906433	cost: 0.2017083001824526
+id:71	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 64	lambd: 1	train_accuracy: 0.96399295	test_accuracy: 0.7976608	cost: 0.13985726377874053
+id:72	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 64	lambd: 10	train_accuracy: 0.96399295	test_accuracy: 0.7976608	cost: 0.13985726377874053
+id:73	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 64	lambd: 30	train_accuracy: 0.96399295	test_accuracy: 0.7976608	cost: 0.13985726377874053
+id:74	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 64	lambd: 50	train_accuracy: 0.96399295	test_accuracy: 0.7976608	cost: 0.13985726377874053
+id:75	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 64	lambd: 100	train_accuracy: 0.96399295	test_accuracy: 0.7976608	cost: 0.13985726377874053
+id:76	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 128	lambd: 1	train_accuracy: 0.9361827	test_accuracy: 0.79298246	cost: 0.2005900118786555
+id:77	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 128	lambd: 10	train_accuracy: 0.9361827	test_accuracy: 0.79298246	cost: 0.2005900118786555
+id:78	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 128	lambd: 30	train_accuracy: 0.9361827	test_accuracy: 0.79298246	cost: 0.2005900118786555
+id:79	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 128	lambd: 50	train_accuracy: 0.9361827	test_accuracy: 0.79298246	cost: 0.2005900118786555
+id:80	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.96	num_epochs: 150	minibatch_size: 128	lambd: 100	train_accuracy: 0.9361827	test_accuracy: 0.79298246	cost: 0.2005900118786555
+id:81	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 64	lambd: 1	train_accuracy: 0.95433253	test_accuracy: 0.80935675	cost: 0.14601419781738856
+id:82	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 64	lambd: 10	train_accuracy: 0.95433253	test_accuracy: 0.80935675	cost: 0.14601419781738856
+id:83	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 64	lambd: 30	train_accuracy: 0.95433253	test_accuracy: 0.80935675	cost: 0.14601419781738856
+id:84	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 64	lambd: 50	train_accuracy: 0.95433253	test_accuracy: 0.80935675	cost: 0.14601419781738856
+id:85	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 64	lambd: 100	train_accuracy: 0.95433253	test_accuracy: 0.80935675	cost: 0.14601419781738856
+id:86	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 128	lambd: 1	train_accuracy: 0.9379391	test_accuracy: 0.79181284	cost: 0.21018920494959906
+id:87	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 128	lambd: 10	train_accuracy: 0.9379391	test_accuracy: 0.79181284	cost: 0.21018920494959906
+id:88	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 128	lambd: 30	train_accuracy: 0.9379391	test_accuracy: 0.79181284	cost: 0.21018920494959906
+id:89	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 128	lambd: 50	train_accuracy: 0.9379391	test_accuracy: 0.79181284	cost: 0.21018920494959906
+id:90	num_epochs: 150	starter_learning_rate: 0.003	learning_rate_decay: 0.9	num_epochs: 150	minibatch_size: 128	lambd: 100	train_accuracy: 0.9379391	test_accuracy: 0.79181284	cost: 0.21018920494959906
+id:91	num_epochs: 150	starter_learning_rate: 0.001	learning_rate_decay: 0.99	num_epochs: 150	minibatch_size: 64	lambd: 1	train_accuracy: 0.8729508	test_accuracy: 0.74152046	cost: 0.35636006886104366
+
+
+
+id:92	num_epochs: 200	starter_learning_rate: 0.006	learning_rate_decay: 0.99	num_epochs: 200	minibatch_size: 64	lambd: 0	train_accuracy: 0.9759953	test_accuracy: 0.78479534	cost: 0.03647133757202131
+id:93	num_epochs: 200	starter_learning_rate: 0.006	learning_rate_decay: 0.99	num_epochs: 200	minibatch_size: 64	lambd: 1	train_accuracy: 0.98126465	test_accuracy: 0.75672513	cost: 0.0711008841523303
+id:94	num_epochs: 200	starter_learning_rate: 0.006	learning_rate_decay: 0.99	num_epochs: 200	minibatch_size: 64	lambd: 100	train_accuracy: 0.98126465	test_accuracy: 0.75672513	cost: 0.0711008841523303
+id:95	num_epochs: 200	starter_learning_rate: 0.003	learning_rate_decay: 0.99	num_epochs: 200	minibatch_size: 64	lambd: 0	train_accuracy: 0.985363	test_accuracy: 0.7871345	cost: 0.08074535682516279
+id:96	num_epochs: 200	starter_learning_rate: 0.003	learning_rate_decay: 0.99	num_epochs: 200	minibatch_size: 64	lambd: 1	train_accuracy: 0.98887587	test_accuracy: 0.7719298	cost: 0.0867026720969182
+id:97	num_epochs: 200	starter_learning_rate: 0.003	learning_rate_decay: 0.9	num_epochs: 200	minibatch_size: 64	lambd: 0	train_accuracy: 0.96311474	test_accuracy: 0.77894735	cost: 0.12126844495816053
+id:98	num_epochs: 200	starter_learning_rate: 0.003	learning_rate_decay: 0.9	num_epochs: 200	minibatch_size: 64	lambd: 1	train_accuracy: 0.96311474	test_accuracy: 0.77894735	cost: 0.12126844495816053
+id:99	num_epochs: 300	starter_learning_rate: 0.003	learning_rate_decay: 0.99	num_epochs: 300	minibatch_size: 64	lambd: 0	train_accuracy: 0.9985363	test_accuracy: 0.78128654	cost: 0.02793894553521894
+id:100	num_epochs: 300	starter_learning_rate: 0.003	learning_rate_decay: 0.99	num_epochs: 300	minibatch_size: 64	lambd: 1	train_accuracy: 0.98887587	test_accuracy: 0.76608187	cost: 0.04188853966177635
+id:101	num_epochs: 300	starter_learning_rate: 0.003	learning_rate_decay: 0.9	num_epochs: 300	minibatch_size: 64	lambd: 0	train_accuracy: 0.98155737	test_accuracy: 0.7859649	cost: 0.08524087995712484
+id:102	num_epochs: 300	starter_learning_rate: 0.003	learning_rate_decay: 0.9	num_epochs: 300	minibatch_size: 64	lambd: 1	train_accuracy: 0.98155737	test_accuracy: 0.7859649	cost: 0.08524087995712484
+
+
+id:103	num_epochs: 300	starter_learning_rate: 0.006	learning_rate_decay: 0.99	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.9985363	test_accuracy: 0.7473684	cost: 0.00944881060793293
+id:104	num_epochs: 300	starter_learning_rate: 0.006	learning_rate_decay: 0.99	minibatch_size: 64	lambd: 0	dropout_rate: 0.1	train_accuracy: 0.94115925	test_accuracy: 0.7590643	cost: 0.3115470762241561
+id:103	num_epochs: 600	starter_learning_rate: 0.007	learning_rate_decay: 0.96	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.9246697	test_accuracy: 0.72397476	cost: 0.20648106640275526
+id:104	num_epochs: 600	starter_learning_rate: 0.007	learning_rate_decay: 0.96	minibatch_size: 64	lambd: 0	dropout_rate: 0.1	train_accuracy: 0.8623546	test_accuracy: 0.70268136	cost: 0.5282087805150432
+id:105	num_epochs: 600	starter_learning_rate: 0.007	learning_rate_decay: 0.96	minibatch_size: 64	lambd: 0	dropout_rate: 0.3	train_accuracy: 0.7974758	test_accuracy: 0.7066246	cost: 0.744664306504817
+id:106	num_epochs: 600	starter_learning_rate: 0.007	learning_rate_decay: 0.96	minibatch_size: 64	lambd: 0	dropout_rate: 0.6	train_accuracy: 0.70873594	test_accuracy: 0.6664038	cost: 1.0015168521977678
+id:107	num_epochs: 3000	starter_learning_rate: 0.007	learning_rate_decay: 0.99	minibatch_size: 64	lambd: 0	dropout_rate: 0.1	train_accuracy: 0.85525537	test_accuracy: 0.71056783	cost: 0.5240988901144339
+id:108	num_epochs: 200	starter_learning_rate: 0.006	learning_rate_decay: 0.99	minibatch_size: 64	lambd: 0	A21 size: 64	train_accuracy: 1.0	test_accuracy: 0.82649845	cost: 0.00021974322704938716
+id:109	num_epochs: 200	starter_learning_rate: 0.006	learning_rate_decay: 0.5	minibatch_size: 64	lambd: 0	A21 size: 64	train_accuracy: 1.0	test_accuracy: 0.7988959	cost: 3.2813201029011335e-06
+id:110	num_epochs: 200	starter_learning_rate: 0.006	learning_rate_decay: 0.5	minibatch_size: 64	lambd: 0	A21 size: 64	train_accuracy: 1.0	test_accuracy: 0.7697161	cost: 0.0015303847063892777
+id:111	num_epochs: 200	starter_learning_rate: 0.006	learning_rate_decay: 0.5	minibatch_size: 64	lambd: 1	A21 size: 64	train_accuracy: 1.0	test_accuracy: 0.8241325	cost: 8.555718891387446e-06
+id:112	num_epochs: 200	starter_learning_rate: 0.006	learning_rate_decay: 0.5	minibatch_size: 64	lambd: 10	A21 size: 64	train_accuracy: 1.0	test_accuracy: 0.8241325	cost: 8.555718891387446e-06
+id:113	num_epochs: 400	starter_learning_rate: 0.006	learning_rate_decay: 0.8	minibatch_size: 64	lambd: 0	dropout_rate: 0.1	train_accuracy: 0.9998247	test_accuracy: 0.8533123	cost: 0.06693712345931387
+id:114	num_epochs: 400	starter_learning_rate: 0.006	learning_rate_decay: 0.8	minibatch_size: 64	lambd: 0	dropout_rate: 0.3	train_accuracy: 0.99859774	test_accuracy: 0.8438486	cost: 0.18248417211717438
+id:115	num_epochs: 400	starter_learning_rate: 0.006	learning_rate_decay: 0.8	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 1.0	test_accuracy: 0.7933754	cost: 1.1282838143179171e-08
+id:116	num_epochs: 400	starter_learning_rate: 0.006	learning_rate_decay: 0.8	minibatch_size: 64	lambd: 1	dropout_rate: 0.1	train_accuracy: 1.0	test_accuracy: 0.84700316	cost: 0.04454824255237857
+id:117	num_epochs: 400	starter_learning_rate: 0.006	learning_rate_decay: 0.8	minibatch_size: 64	lambd: 1	dropout_rate: 0.3	train_accuracy: 0.99859774	test_accuracy: 0.8438486	cost: 0.18248417211717438
+id:118	num_epochs: 400	starter_learning_rate: 0.006	learning_rate_decay: 0.8	minibatch_size: 64	lambd: 1	dropout_rate: 0	train_accuracy: 1.0	test_accuracy: 0.7933754	cost: 1.1282838143179171e-08
+id:119	num_epochs: 400	starter_learning_rate: 0.006	learning_rate_decay: 0.8	minibatch_size: 64	lambd: 10	dropout_rate: 0.1	train_accuracy: 1.0	test_accuracy: 0.84700316	cost: 0.04454824255237857
+id:120	num_epochs: 400	starter_learning_rate: 0.006	learning_rate_decay: 0.8	minibatch_size: 64	lambd: 10	dropout_rate: 0.3	train_accuracy: 0.99859774	test_accuracy: 0.8438486	cost: 0.18248417211717438
+id:121	num_epochs: 400	starter_learning_rate: 0.006	learning_rate_decay: 0.8	minibatch_size: 64	lambd: 10	dropout_rate: 0	train_accuracy: 1.0	test_accuracy: 0.7933754	cost: 1.1282838143179171e-08
+id:122	num_epochs: 200	starter_learning_rate: 0.006	learning_rate_decay: 0.8	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.9598598	test_accuracy: 0.7444795	cost: 0.1434471199519179
+id:123	num_epochs: 200	starter_learning_rate: 0.006	learning_rate_decay: 0.5	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.9824715	test_accuracy: 0.75236595	cost: 0.04893002466277709
+id:124	num_epochs: 200	starter_learning_rate: 0.006	learning_rate_decay: 0.5	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 1.0	test_accuracy: 0.8201893	cost: 0.002622776052632024
+id:125	num_epochs: 200	starter_learning_rate: 0.006	learning_rate_decay: 0.5	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 1.0	test_accuracy: 0.32082552	cost: 0.0020213255628169884
+id:126	num_epochs: 200	starter_learning_rate: 0.006	learning_rate_decay: 0.5	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.74744326	test_accuracy: 0.31144464	cost: 0.597600596666336
+id:127	num_epochs: 300	starter_learning_rate: 0.006	learning_rate_decay: 0.8	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 1.0	test_accuracy: 0.34709194	cost: 0.003394620559608003
+id:130	num_epochs: 200	starter_learning_rate: 0.006	learning_rate_decay: 0.8	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.92915475	test_accuracy: 0.45590994	cost: 0.2179902041075277	m_train: 9796	m_test: 533
+id:131	num_epochs: 200	starter_learning_rate: 0.006	learning_rate_decay: 0.8	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.89400375	test_accuracy: 0.46456692	cost: 0.3081400779802261	m_train: 13425	m_test: 508
+id:132	num_epochs: 300	starter_learning_rate: 0.006	learning_rate_decay: 0.8	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.91526026	test_accuracy: 0.56299216	cost: 0.21953456811606883	m_train: 14102	m_test: 508
+id:133	num_epochs: 300	starter_learning_rate: 0.006	learning_rate_decay: 0.85	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.8577987	test_accuracy: 0.41929135	cost: 0.4027280670711559	m_train: 16772	m_test: 508
+id:134	num_epochs: 350	starter_learning_rate: 0.006	learning_rate_decay: 0.85	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.8547579	test_accuracy: 0.42716536	cost: 0.3919223818273943	m_train: 16772	m_test: 508
+id:135	num_epochs: 400	starter_learning_rate: 0.006	learning_rate_decay: 0.85	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.8614357	test_accuracy: 0.42322835	cost: 0.37462596595287345	m_train: 16772	m_test: 508
+id:137	num_epochs: 400	starter_learning_rate: 0.006	learning_rate_decay: 0.9	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.83860004	test_accuracy: 0.42913386	cost: 0.45436043440158136	m_train: 16772	m_test: 508
+id:138	num_epochs: 500	starter_learning_rate: 0.006	learning_rate_decay: 0.9	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.8420582	test_accuracy: 0.4507874	cost: 0.41287430734124825	m_train: 16772	m_test: 508
+id:139	num_epochs: 600	starter_learning_rate: 0.006	learning_rate_decay: 0.9	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.8521345	test_accuracy: 0.43700787	cost: 0.4041912770112052	m_train: 16772	m_test: 508
+id:140	num_epochs: 200	starter_learning_rate: 0.006	learning_rate_decay: 0.8	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.8214286	test_accuracy: 0.47637796	cost: 0.4888404635072666	m_train: 16772	m_test: 508  12
+id:141	num_epochs: 200	starter_learning_rate: 0.006	learning_rate_decay: 0.8	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.88326013	test_accuracy: 0.43700787	cost: 0.30757296283225555	m_train: 19582	m_test: 508  24
+id:145	num_epochs: 300	starter_learning_rate: 0.006	learning_rate_decay: 0.85	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.78945136	test_accuracy: 0.4566929	cost: 0.5612339019955465	m_train: 21216	m_test: 508
+id:146	num_epochs: 400	starter_learning_rate: 0.006	learning_rate_decay: 0.85	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.80825794	test_accuracy: 0.48818898	cost: 0.5296155339461441	m_train: 21216	m_test: 508
+id:149	num_epochs: 200	starter_learning_rate: 0.006	learning_rate_decay: 0.85	minibatch_size: 128	lambd: 0	dropout_rate: 0	train_accuracy: 0.87344456	test_accuracy: 0.43700787	cost: 0.3424160035270633	m_train: 21216	m_test: 508
+id:150	num_epochs: 300	starter_learning_rate: 0.006	learning_rate_decay: 0.85	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.88956445	test_accuracy: 0.48818898	cost: 0.3069509637409828	m_train: 21216	m_test: 508
+id:151	num_epochs: 400	starter_learning_rate: 0.006	learning_rate_decay: 0.85	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.9015366	test_accuracy: 0.48818898	cost: 0.2783688443439966	m_train: 21216	m_test: 508
+id:152	num_epochs: 300	starter_learning_rate: 0.006	learning_rate_decay: 0.9	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.7969457	test_accuracy: 0.5826772	cost: 0.5564083162571369	m_train: 21216	m_test: 508
+id:153	num_epochs: 400	starter_learning_rate: 0.006	learning_rate_decay: 0.9	minibatch_size: 64	lambd: 0	dropout_rate: 0	train_accuracy: 0.7202648	test_accuracy: 0.5885827	cost: 0.6722187410053028	m_train: 22507	m_test: 508

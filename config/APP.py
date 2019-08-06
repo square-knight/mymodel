@@ -11,10 +11,12 @@ app 的配置文件路径
 """
 
 # 放置图片的路径
-images_path = "/Users/doom/local/python_workspace/hand_figure/images"
-images_path_train = "/Users/doom/local/python_workspace/hand_figure/images/train"
-images_path_test = "/Users/doom/local/python_workspace/hand_figure/images/test"
-model_path = "/Users/doom/local/python_workspace/hand_figure/resource/model/"
-resource_path = "/Users/doom/local/python_workspace/hand_figure/resource/"
+project_path = "/Users/doom/local/python_workspace/hand_figure"
+images_path = project_path + "/images"
+images_path_train = project_path + "/images/train"
+images_path_test = project_path + "/images/test"
+model_path = project_path + "/resource/model/"
+resource_path = project_path + "/resource/"
+app_path = project_path + "/resource/app/"
 if __name__ == '__main__':
     pass

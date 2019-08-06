@@ -9,7 +9,7 @@
 import logging
 import os
 from io import BytesIO
-from flask import request
+from flask import request, send_from_directory
 
 import numpy as np
 from PIL import Image
@@ -17,12 +17,18 @@ from PIL import Image
 from app.main import predict
 from app.main import readImageFromDisk
 
-from config.APP import images_path, images_path_train, images_path_test
+from config.APP import images_path, images_path_train, images_path_test, app_path
 from util.filename import gen_image_filename
 
 from app.myblueprint import web
 
 logger = logging.getLogger(__name__)
+
+
+@web.route("/download/<filename>", methods=['GET'])
+def download_file(filename):
+    # 需要知道2个参数, 第1个参数是本地目录的path, 第2个参数是文件名(带扩展名)
+    return send_from_directory(app_path, filename, as_attachment=True)
 
 
 @web.route('/predict', methods=["POST", "GET"])
@@ -80,7 +86,7 @@ def collect_img():
     message = f"图片已经保存. path: {absolute_path},filename:{filename}"
     logger.info(message)
 
-    return "ok"
+    return "正在收集图像"
 
 
 @web.route('/train', methods=["POST", "GET"])

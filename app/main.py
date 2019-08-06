@@ -192,9 +192,9 @@ if __name__ == '__main__':
 
     # _, y = imgsToDataSet(images_path_train)
     # print(m)
-    num_epochss = [200]
+    num_epochss = [300,400]
     starter_learning_rates = [0.006]
-    learning_rate_decays = [0.8]
+    learning_rate_decays = [0.9]
     minibatch_sizes = [64]
     lambds = [0]
     dropout_rates = [0]
