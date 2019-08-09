@@ -150,7 +150,7 @@ def model(X_train, Y_train, X_test, Y_test, starter_learning_rate=0.003,learning
 
     # Create Placeholders of the correct shape
     ### START CODE HERE ### (1 line)
-    X, Y, lambd, dropout = create_placeholders(n_H0, n_W0, n_C0, n_y)
+    X, Y, lambd, dropout, training = create_placeholders(n_H0, n_W0, n_C0, n_y)
     ### END CODE HERE ###
 
     # Initialize parameters
@@ -160,7 +160,7 @@ def model(X_train, Y_train, X_test, Y_test, starter_learning_rate=0.003,learning
 
     # Forward propagation: Build the forward propagation in the tensorflow graph
     ### START CODE HERE ### (1 line)
-    Z3 = forward_propagation(X, parameters, lambd, dropout)
+    Z3 = forward_propagation(X, parameters, lambd, dropout, training)
     ### END CODE HERE ###
 
     # Cost function: Add cost function to tensorflow graph
@@ -172,7 +172,7 @@ def model(X_train, Y_train, X_test, Y_test, starter_learning_rate=0.003,learning
     ### START CODE HERE ### (1 line)
     global_step = tf.Variable(0, trainable=False)
     learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step,
-                                               50000, learning_rate_decay, staircase=True)
+                                               100000, learning_rate_decay, staircase=True)
     optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost, global_step=global_step)
     tf.add_to_collection("opt", optimizer)
     tf.add_to_collection("opt", cost)
@@ -207,7 +207,7 @@ def model(X_train, Y_train, X_test, Y_test, starter_learning_rate=0.003,learning
                 ### START CODE HERE ### (1 line)
                 _, temp_cost, step = sess.run(tf.get_collection("opt"),
                                               feed_dict={X: minibatch_X, Y: minibatch_Y,
-                                                         lambd: lambd_train})#, dropout: dropout_rate
+                                                         lambd: lambd_train, training: True})#, dropout: dropout_rate
                 ### END CODE HERE ###
 
                 minibatch_cost += temp_cost / num_minibatches
@@ -218,12 +218,6 @@ def model(X_train, Y_train, X_test, Y_test, starter_learning_rate=0.003,learning
             if print_cost == True and epoch % 1 == 0:
                 costs.append(minibatch_cost)
 
-        # plot the cost
-        # plt.plot(np.squeeze(costs))
-        # plt.ylabel('cost')
-        # plt.xlabel('iterations (per tens)')
-        # plt.title("Learning rate =" + str(learning_rate))
-        # plt.show()
 
         # Calculate the correct predictions
         predict_op = tf.argmax(Z3, 1, name='predict_op')
@@ -233,8 +227,8 @@ def model(X_train, Y_train, X_test, Y_test, starter_learning_rate=0.003,learning
         # Calculate accuracy on the test set
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
         # print(accuracy)
-        train_accuracy = accuracy.eval({X: X_train, Y: Y_train, lambd: 0})#, dropout: 0
-        test_accuracy = accuracy.eval({X: X_test, Y: Y_test, lambd: 0})#, dropout: 0
+        train_accuracy = accuracy.eval({X: X_train, Y: Y_train, lambd: 0, training: False})#, dropout: 0
+        test_accuracy = accuracy.eval({X: X_test, Y: Y_test, lambd: 0, training: False})#, dropout: 0
         # print("Train Accuracy:", train_accuracy)
         # print("Test Accuracy:", test_accuracy)
 
@@ -270,7 +264,8 @@ def create_placeholders(n_H0, n_W0, n_C0, n_y):
     Y = tf.placeholder(name='Y', shape=(None, n_y), dtype=tf.float32)
     lambd = tf.placeholder(name='lambd', dtype=tf.float32)
     dropout = tf.placeholder(name='dropout', dtype=tf.float32)
-    return X, Y, lambd, dropout
+    training = tf.placeholder(name='training', dtype=tf.bool)
+    return X, Y, lambd, dropout, training
 
 
 def initialize_parameters():
@@ -290,7 +285,6 @@ def initialize_parameters():
     W2 = tf.get_variable(name='W2', dtype=tf.float32, shape=(2, 2, 16, 32),
                          initializer=tf.contrib.layers.xavier_initializer(seed=0))
     bias2 = tf.get_variable('bias2', 32, initializer=tf.constant_initializer(0.0))
-
     parameters = {"W1": W1,
                   "W2": W2,
                   "bias1": bias1,
@@ -299,7 +293,7 @@ def initialize_parameters():
     return parameters
 
 
-def forward_propagation(X, parameters, lambd_ph, dropout):
+def forward_propagation(X, parameters, lambd_ph, dropout, training):
     """
     Implements the forward propagation for the model:
     CONV2D -> RELU -> MAXPOOL -> CONV2D -> RELU -> MAXPOOL -> FLATTEN -> FULLYCONNECTED
@@ -337,15 +331,16 @@ def forward_propagation(X, parameters, lambd_ph, dropout):
 
     #layer3
     # FLATTEN
-    P2 = tf.contrib.layers.flatten(inputs=P2)
+    P2 = tf.layers.flatten(inputs=P2)
     # print(P2)
     # P2_dropout = tf.nn.dropout(P2, rate=dropout)
     # FULLY-CONNECTED without non-linear activation function (not not call softmax).
     # 6 neurons in output layer. Hint: one of the arguments should be "activation_fn=None"
     # Z3 = tf.contrib.layers.fully_connected(P2_dropout, 6, activation_fn=None,
     #                                        weights_regularizer=tf.contrib.layers.l2_regularizer(lambd_ph))
-    A21 = tf.contrib.layers.fully_connected(P2, 12)
-    Z3 = tf.contrib.layers.fully_connected(A21, 6, activation_fn=None)
+
+    A21 = tf.layers.dense(P2, 12, activation=tf.nn.relu)
+    Z3 = tf.layers.dense(A21, 6, activation=None)
     ### END CODE HERE ###
 
     return Z3

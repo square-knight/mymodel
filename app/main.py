@@ -7,11 +7,12 @@ sys.path.append(parentPath)
 
 import numpy as np
 import matplotlib.pyplot as plt
-from app.cnn_utils import convert_to_one_hot, load_dataset
+from app.cnn_utils import convert_to_one_hot
 from app.model import normalize, normalize1, model1, model, splitDataToTrainAndTest
 import tensorflow as tf
 from config.APP import model_path, images_path_train, resource_path, images_path_test
 from util.Model import getModelName
+from app.CNN import train
 # import os
 from util.redis_client import trainIdGenerator
 import logging
@@ -80,9 +81,10 @@ def predict(x, model_identifier=None):
         graph = tf.get_default_graph()
         X = graph.get_tensor_by_name("X:0")
         lambd = graph.get_tensor_by_name("lambd:0")
+        training = graph.get_tensor_by_name("training:0")
         dropout = graph.get_tensor_by_name("dropout:0")
         predict_op = graph.get_tensor_by_name("predict_op:0")
-        return predict_op.eval({X: x, lambd: 0, dropout: 0})
+        return predict_op.eval({X: x, lambd: 0, dropout: 0, training: False})
 
 def retrain(x, y, model_identifier=None):
     # x = normalize1(x_orig)
@@ -125,7 +127,7 @@ def retrain(x, y, model_identifier=None):
     plt.show()
 
 
-def train(starter_learning_rate, learning_rate_decay, dropout_rate,num_epochs=200, minibatch_size=64, lambd=0):
+def train1(starter_learning_rate, learning_rate_decay, dropout_rate,num_epochs=200, minibatch_size=64, lambd=0):
     # load dataset
     # X_train_orig, Y_train_orig, X_test_orig, Y_test_orig, classes = load_dataset()
     X_train_orig, Y_train_orig = imgsToDataSet(images_path_train)
@@ -140,10 +142,14 @@ def train(starter_learning_rate, learning_rate_decay, dropout_rate,num_epochs=20
     Y_test = convert_to_one_hot(Y_test_orig, 6).T
 
     # train
-    train_accuracy, test_accuracy, parameters, costs = model(
-        X_train, Y_train, X_test, Y_test,
-        starter_learning_rate=starter_learning_rate, learning_rate_decay=learning_rate_decay, dropout_rate=dropout_rate,
-        num_epochs=num_epochs, minibatch_size=minibatch_size, lambd_train=lambd)
+    # train_accuracy, test_accuracy, parameters, costs = model(
+    #     X_train, Y_train, X_test, Y_test,
+    #     starter_learning_rate=starter_learning_rate, learning_rate_decay=learning_rate_decay, dropout_rate=dropout_rate,
+    #     num_epochs=num_epochs, minibatch_size=minibatch_size, lambd_train=lambd)
+    train_accuracy, test_accuracy, costs = train(
+        X_train, Y_train, X_test, Y_test,num_epochs=num_epochs, minibatch_size=minibatch_size,
+        starter_learning_rate=starter_learning_rate, learning_rate_decay=learning_rate_decay
+        )
     # save the model
 
     # print accuracy
@@ -192,7 +198,7 @@ if __name__ == '__main__':
 
     # _, y = imgsToDataSet(images_path_train)
     # print(m)
-    num_epochss = [300,400]
+    num_epochss = [100]
     starter_learning_rates = [0.006]
     learning_rate_decays = [0.9]
     minibatch_sizes = [64]
@@ -205,7 +211,7 @@ if __name__ == '__main__':
                     for lambd in lambds:
                         for dropout_rate in dropout_rates:
                             iid = trainIdGenerator.gen_id()
-                            train_accuracy, test_accuracy, costs, m_train, m_test = train(
+                            train_accuracy, test_accuracy, costs, m_train, m_test = train1(
                                 starter_learning_rate=starter_learning_rate,
                                 learning_rate_decay=learning_rate_decay,
                                 dropout_rate=dropout_rate,
