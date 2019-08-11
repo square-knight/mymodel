@@ -18,8 +18,7 @@ def fully_connected(prev_layer, num_units, is_training):
     :return: Tensor
     一个新的全连接神经网络层
     """
-    layer = tf.layers.dense(prev_layer, num_units,
-                            use_bias=False, activation=None)
+    layer = tf.keras.layers.Dense(units=num_units,activation=None,use_bias=False)(inputs=prev_layer)
     layer = tf.keras.layers.BatchNormalization()(layer, training=is_training)
     layer = tf.nn.relu(layer)
     return layer
@@ -140,11 +139,11 @@ def train(x_train, y_train, x_test, y_test, num_epochs, minibatch_size, starter_
     (m, h, w, c) = x_train.shape
 
     # Build placeholders for the input samples and labels
-    inputs = tf.placeholder(tf.float32, [None, 64, 64, 3])
+    inputs = tf.placeholder(tf.float32, [None, 64, 64, 3], name='inputs')
     labels = tf.placeholder(tf.float32, [None, 6])
 
     # Add placeHolder to indicate whether or not we're training the model
-    is_training = tf.placeholder(tf.bool)
+    is_training = tf.placeholder(tf.bool, name='is_training')
 
     # Feed the inputs into a series of convolutional layers
     c1 = conv_layer(inputs, 16, 4, is_training)
@@ -152,14 +151,13 @@ def train(x_train, y_train, x_test, y_test, num_epochs, minibatch_size, starter_
     c2 = conv_layer(p1, 32, 4, is_training)
     p2 = tf.nn.max_pool(value=c2, ksize=(1, 4, 4, 1), strides=(1, 4, 4, 1), padding='SAME')
     # Flatten the output from the convolutional layers
-    p2 = tf.layers.flatten(inputs=p2)
+    p2 = tf.keras.layers.Flatten()(inputs=p2)
     # Add one fully connected layer
-    fc1 = fully_connected(p2, 12, is_training)
+    fc1 = fully_connected(p2, 32, is_training)
     # Create the output layer with 1 node for each label
-    logits = tf.layers.dense(fc1, 6,
-                             use_bias=False, activation=None)
+    logits = tf.keras.layers.Dense(units=6, activation=None, use_bias=False)(fc1)
     # Define loss and training operations
-    model_loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=labels))
+    model_loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(logits=logits, labels=labels))
 
     # Tell Tensorflow to update the population statistics while training
     # 从 ops 中过滤出 updates_ops，然后添加到指定的 collection
@@ -168,7 +166,7 @@ def train(x_train, y_train, x_test, y_test, num_epochs, minibatch_size, starter_
     with tf.control_dependencies(update_ops):
         global_step = tf.Variable(0, trainable=False)
         learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step,
-                                                   100000, learning_rate_decay, staircase=True)
+                                                   20000, learning_rate_decay, staircase=True)
         train_opt = tf.train.AdamOptimizer(learning_rate).minimize(model_loss, global_step=global_step)
 
     # Create operations to test accuracy

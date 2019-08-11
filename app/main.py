@@ -79,12 +79,10 @@ def predict(x, model_identifier=None):
         saver = tf.train.import_meta_graph(model_path + model_name + '.meta')
         saver.restore(sess, tf.train.latest_checkpoint(model_path))
         graph = tf.get_default_graph()
-        X = graph.get_tensor_by_name("X:0")
-        lambd = graph.get_tensor_by_name("lambd:0")
-        training = graph.get_tensor_by_name("training:0")
-        dropout = graph.get_tensor_by_name("dropout:0")
-        predict_op = graph.get_tensor_by_name("predict_op:0")
-        return predict_op.eval({X: x, lambd: 0, dropout: 0, training: False})
+        inputs = graph.get_tensor_by_name("inputs:0")
+        is_training = graph.get_tensor_by_name("is_training:0")
+        predict_op = graph.get_tensor_by_name("prediction:0")
+        return predict_op.eval({inputs: x, is_training: False})
 
 def retrain(x, y, model_identifier=None):
     # x = normalize1(x_orig)
@@ -198,9 +196,9 @@ if __name__ == '__main__':
 
     # _, y = imgsToDataSet(images_path_train)
     # print(m)
-    num_epochss = [100]
+    num_epochss = [150]
     starter_learning_rates = [0.006]
-    learning_rate_decays = [0.9]
+    learning_rate_decays = [1]
     minibatch_sizes = [64]
     lambds = [0]
     dropout_rates = [0]
