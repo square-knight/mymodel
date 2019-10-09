@@ -9,4 +9,5 @@
 [Android app](https://github.com/square-knight/OhMyFinger)
 安装Android app授予网络和摄像机权限
 
-## 训练集
+## 数据集
+[手指图片](https://github.com/square-knight/finger_train_set)
