@@ -8,6 +8,7 @@
 ## client
 [Android app](https://github.com/square-knight/OhMyFinger)
 安装Android app授予网络和摄像机权限
+app有图像收集和预测两种功能
 
 ## 数据集
 [手指图片](https://github.com/square-knight/finger_train_set)
